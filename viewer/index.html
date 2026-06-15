@@ -62,7 +62,14 @@
     background:radial-gradient(120% 80% at 50% -10%, #2a241f 0%, var(--ink) 55%, #100d0b 100%);
     border:1px solid var(--brass-dim);border-radius:18px;padding:10px;
     box-shadow:0 30px 80px rgba(0,0,0,.55), inset 0 0 0 1px rgba(196,160,82,.18);
-    transform-origin:center;animation:flipin .4s cubic-bezier(.34,0,.2,1) both;}
+    transform-origin:center;}
+  .face.anim-next{animation:slideNext .3s cubic-bezier(.4,0,.2,1) both;}
+  .face.anim-prev{animation:slidePrev .3s cubic-bezier(.4,0,.2,1) both;}
+  .face.anim-flip{animation:flipin .4s cubic-bezier(.34,0,.2,1) both;}
+  .face.anim-in{animation:fadein .25s ease both;}
+  @keyframes slideNext{from{transform:translateX(38px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+  @keyframes slidePrev{from{transform:translateX(-38px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+  @keyframes fadein{from{opacity:0;transform:scale(.99);}to{opacity:1;transform:none;}}
   @keyframes flipin{from{transform:rotateY(-100deg) scale(.94);opacity:0;}55%{opacity:1;}to{transform:rotateY(0) scale(1);opacity:1;}}
   .plate{flex:1;background:linear-gradient(180deg,#f6f1e6 0%, var(--bone) 100%);
     border:1px solid var(--brass);border-radius:12px;padding:22px 22px 18px;position:relative;display:flex;flex-direction:column;}
@@ -320,7 +327,7 @@ function buildMatchups(group,up,diff){
 /* ============================ shared state ============================ */
 const STORE_KEY='btb:known';
 let mode='matchups';
-let deck=[], view=[], idx=0, flipped=false, order=null;
+let deck=[], view=[], idx=0, flipped=false, order=null, anim='in';
 let mFilter={ group:'all', up:'all', diff:'all' };
 let lFilter={ tier:'all', cat:'all' };
 let known=loadKnown();
@@ -361,6 +368,7 @@ function render(){
   document.getElementById('againBtn').onclick=()=>judge(false);
   document.getElementById('gotBtn').onclick=()=>judge(true);
   updateProgress();
+  anim='in';
 }
 function navHTML(){
   return `
@@ -381,7 +389,7 @@ function matchupFace(){
   const reveal=flipped;
   const stats=matchupStats(m.hand,m.up,m.code).map(l=>`<div>${l}</div>`).join('');
   return `
-    <div class="scene"><div class="flip" id="flip"><div class="face ${isKnown?'is-known':''}"><div class="plate">
+    <div class="scene"><div class="flip" id="flip"><div class="face anim-${anim} ${isKnown?'is-known':''}"><div class="plate">
       <span class="diff-badge ${m.diff}">${m.diff}</span>
       <span class="known-flag">✓</span>
       <div class="mu-top"><span class="pill">${esc(m.hand.label)}</span><span class="vs">vs</span><span class="pill">Dealer ${m.up==='A'?'Ace':m.up}</span></div>
@@ -412,10 +420,10 @@ function lessonFace(){
       <div class="meta"><span class="badge" style="background:${accent}">${esc(c.category)}</span><span class="badge tier">Tier ${c.tier}</span>${rs}</div>
       <div class="label">Question</div><div class="front-q">${esc(c.front)}</div>
       <div class="hint">tap to flip</div>`;
-  return `<div class="scene"><div class="flip" id="flip"><div class="face ${isKnown?'is-known':''}"><div class="plate">${inner}</div></div></div></div>`;
+  return `<div class="scene"><div class="flip" id="flip"><div class="face anim-${anim} ${isKnown?'is-known':''}"><div class="plate">${inner}</div></div></div></div>`;
 }
-function doFlip(){ flipped=!flipped; render(); }
-function go(d){ const n=idx+d; if(n<0||n>=view.length) return; idx=n; flipped=false; render(); }
+function doFlip(){ flipped=!flipped; anim='flip'; render(); }
+function go(d){ const n=idx+d; if(n<0||n>=view.length) return; idx=n; flipped=false; anim=d>0?'next':'prev'; render(); }
 function judge(got){ const c=view[idx]; if(got) known.add(c.id); else known.delete(c.id); saveKnown(); if(idx<view.length-1) go(1); else render(); }
 function updateProgress(){
   const total=view.length, learned=view.filter(c=>known.has(c.id)).length, p=total?Math.round(learned/total*100):0;

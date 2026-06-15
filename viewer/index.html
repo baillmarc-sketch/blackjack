@@ -12,7 +12,6 @@
     --ink:#14110F; --ink-2:#221d19; --brass:#C4A052; --brass-dim:#8c7437;
     --bone:#F2ECDE; --bone-line:#d9cfb8;
     --hit:#C0473B; --stand:#2E7D5B; --double:#C8912E; --split:#3E6E9E; --surr:#897F73;
-    /* category accents */
     --c-rules:#5b6770; --c-hard-total:#3E6E9E; --c-soft-total:#2E7D5B;
     --c-pair:#7a5ea0; --c-trap:#C0473B; --c-counting:#C8912E;
     --c-deviation:#b3702a; --c-bankroll:#4f7a8c; --c-etiquette:#897F73;
@@ -22,135 +21,125 @@
   body{
     font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--ink);
     display:flex;flex-direction:column;align-items:center;
-    padding:28px 16px 40px;-webkit-font-smoothing:antialiased;min-height:100vh;
+    padding:26px 16px 40px;-webkit-font-smoothing:antialiased;min-height:100vh;
   }
-
   .shell{width:600px;max-width:100%;}
 
-  /* masthead */
-  .masthead{text-align:center;margin-bottom:18px;color:var(--bone);}
-  .masthead .eyebrow{
-    font-family:"IBM Plex Mono",monospace;font-weight:500;letter-spacing:.42em;
-    font-size:10px;color:var(--brass);text-transform:uppercase;padding-left:.42em;
-  }
-  .masthead h1{font-family:"Fraunces",serif;font-weight:900;font-size:34px;
-    line-height:1;letter-spacing:-.5px;margin:5px 0 4px;color:var(--bone);}
+  .masthead{text-align:center;margin-bottom:14px;color:var(--bone);}
+  .masthead .eyebrow{font-family:"IBM Plex Mono",monospace;font-weight:500;letter-spacing:.42em;
+    font-size:10px;color:var(--brass);text-transform:uppercase;padding-left:.42em;}
+  .masthead h1{font-family:"Fraunces",serif;font-weight:900;font-size:34px;line-height:1;
+    letter-spacing:-.5px;margin:5px 0 4px;color:var(--bone);}
   .masthead .sub{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--brass-dim);}
 
-  /* toolbar */
-  .toolbar{
-    display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;justify-content:center;
-    margin-bottom:14px;
-  }
+  /* mode + tool controls */
+  .modes{display:flex;justify-content:center;margin-bottom:14px;}
   .seg{display:flex;border:1px solid var(--brass-dim);border-radius:7px;overflow:hidden;}
-  .seg button{
-    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;
-    background:transparent;color:var(--bone);border:none;padding:6px 11px;cursor:pointer;
-    border-right:1px solid rgba(196,160,82,.25);transition:background .12s,color .12s;
-  }
+  .seg button{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;
+    background:transparent;color:var(--bone);border:none;padding:6px 13px;cursor:pointer;
+    border-right:1px solid rgba(196,160,82,.25);transition:background .12s,color .12s;white-space:nowrap;}
   .seg button:last-child{border-right:none;}
   .seg button:hover{background:rgba(196,160,82,.12);}
   .seg button.on{background:var(--brass);color:var(--ink);font-weight:600;}
+  .modes .seg button{padding:7px 18px;font-size:12px;}
 
-  select.cat{
-    font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--bone);
-    background:#1b1714;border:1px solid var(--brass-dim);border-radius:7px;
-    padding:6px 9px;cursor:pointer;
-  }
-  .tool-btn{
-    font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--bone);
-    background:transparent;border:1px solid var(--brass-dim);border-radius:7px;
-    padding:6px 11px;cursor:pointer;transition:background .12s;
-  }
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;justify-content:center;margin-bottom:14px;}
+  select.sel{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--bone);
+    background:#1b1714;border:1px solid var(--brass-dim);border-radius:7px;padding:6px 9px;cursor:pointer;}
+  .tool-btn{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--bone);
+    background:transparent;border:1px solid var(--brass-dim);border-radius:7px;padding:6px 11px;cursor:pointer;transition:background .12s;}
   .tool-btn:hover{background:rgba(196,160,82,.12);}
 
-  /* progress */
   .progress{display:flex;align-items:center;gap:10px;margin-bottom:14px;
     font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--brass-dim);}
-  .bar{flex:1;height:5px;background:#241f1a;border-radius:3px;overflow:hidden;
-    border:1px solid rgba(196,160,82,.2);}
+  .bar{flex:1;height:5px;background:#241f1a;border-radius:3px;overflow:hidden;border:1px solid rgba(196,160,82,.2);}
   .bar > i{display:block;height:100%;width:0;background:var(--stand);transition:width .3s;}
 
-  /* card / flip scene */
+  /* card shell (shared) */
   .scene{perspective:1600px;width:100%;}
   .flip{position:relative;width:100%;min-height:360px;cursor:pointer;}
-  /* Single rendered face — no two-layer backface trick (which fails on iOS Safari
-     and showed both sides at once). Each render animates a short flip-in. */
-  .face{
-    position:relative;width:100%;min-height:360px;
-    display:flex;flex-direction:column;
+  .face{position:relative;width:100%;min-height:360px;display:flex;flex-direction:column;
     background:radial-gradient(120% 80% at 50% -10%, #2a241f 0%, var(--ink) 55%, #100d0b 100%);
     border:1px solid var(--brass-dim);border-radius:18px;padding:10px;
     box-shadow:0 30px 80px rgba(0,0,0,.55), inset 0 0 0 1px rgba(196,160,82,.18);
-    transform-origin:center;animation:flipin .34s cubic-bezier(.4,0,.2,1) both;
-  }
-  @keyframes flipin{
-    from{transform:rotateY(-90deg) scale(.96);opacity:0;}
-    60%{opacity:1;}
-    to{transform:rotateY(0) scale(1);opacity:1;}
-  }
-  .plate{
-    flex:1;background:linear-gradient(180deg,#f6f1e6 0%, var(--bone) 100%);
-    border:1px solid var(--brass);border-radius:12px;padding:22px 22px 18px;
-    position:relative;display:flex;flex-direction:column;
-  }
-  .plate::after{content:"";position:absolute;inset:6px;border:1px solid var(--bone-line);
-    border-radius:8px;pointer-events:none;}
+    transform-origin:center;animation:flipin .34s cubic-bezier(.4,0,.2,1) both;}
+  @keyframes flipin{from{transform:rotateY(-90deg) scale(.96);opacity:0;}60%{opacity:1;}to{transform:rotateY(0) scale(1);opacity:1;}}
+  .plate{flex:1;background:linear-gradient(180deg,#f6f1e6 0%, var(--bone) 100%);
+    border:1px solid var(--brass);border-radius:12px;padding:22px 22px 18px;position:relative;display:flex;flex-direction:column;}
+  .plate::after{content:"";position:absolute;inset:6px;border:1px solid var(--bone-line);border-radius:8px;pointer-events:none;}
 
+  /* ---- matchup ---- */
+  .mu-top{display:flex;align-items:center;justify-content:center;gap:10px;position:relative;z-index:1;margin-bottom:16px;}
+  .mu-top .pill{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-2);}
+  .mu-top .vs{font-family:"Fraunces",serif;font-style:italic;font-size:14px;color:var(--brass-dim);}
+  .hands{display:flex;align-items:flex-start;justify-content:center;gap:26px;position:relative;z-index:1;}
+  .hand{display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .hand-cap{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--brass-dim);}
+  .cards{display:flex;gap:-6px;}
+  .pcard{width:50px;height:70px;border-radius:7px;background:#fcf9f1;border:1px solid #cdbf9f;
+    box-shadow:0 4px 10px rgba(0,0,0,.18);position:relative;margin-left:-10px;
+    font-family:"Fraunces",serif;font-weight:700;color:#1a1714;}
+  .pcard:first-child{margin-left:0;}
+  .pcard.red{color:#b3261e;}
+  .pcard .rk{position:absolute;top:4px;left:6px;font-size:15px;line-height:1;}
+  .pcard .su{position:absolute;bottom:4px;right:6px;font-size:13px;line-height:1;}
+  .pcard .mid{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;opacity:.9;}
+  .pcard.back{background:repeating-linear-gradient(45deg,#2a241f 0 6px,#1d1813 6px 12px);border-color:var(--brass-dim);}
+
+  .answer{position:relative;z-index:1;margin-top:auto;padding-top:16px;text-align:center;
+    opacity:0;transform:translateY(6px);transition:opacity .2s, transform .2s;}
+  .answer.show{opacity:1;transform:none;}
+  .action{font-family:"Fraunces",serif;font-weight:900;font-size:34px;line-height:1;letter-spacing:-.5px;}
+  .action.A-H{color:var(--hit);} .action.A-S{color:var(--stand);} .action.A-D{color:var(--double);}
+  .action.A-P{color:var(--split);} .action.A-R{color:var(--surr);}
+  .act-note{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-2);margin-top:4px;letter-spacing:.04em;}
+  .statlines{margin-top:12px;background:rgba(20,17,15,.05);border:1px solid var(--bone-line);
+    border-radius:8px;padding:10px 12px;text-align:left;}
+  .statlines div{font-size:12.5px;line-height:1.55;color:var(--ink-2);}
+  .statlines div + div{margin-top:3px;}
+  .statlines b{color:var(--ink);font-weight:600;}
+  .reveal-hint{position:absolute;bottom:14px;left:0;right:0;text-align:center;z-index:1;
+    font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--brass-dim);}
+  .answer.show ~ .reveal-hint{display:none;}
+
+  /* ---- lessons ---- */
   .meta{display:flex;align-items:center;gap:7px;position:relative;z-index:1;margin-bottom:14px;}
-  .badge{
-    font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;letter-spacing:.08em;
-    text-transform:uppercase;color:#fff;padding:3px 7px;border-radius:4px;
-  }
+  .badge{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;color:#fff;padding:3px 7px;border-radius:4px;}
   .badge.tier{background:var(--ink-2);color:var(--brass);border:1px solid var(--brass-dim);}
-  .badge.rs{background:transparent;color:var(--brass-dim);border:1px solid var(--brass-dim);
-    margin-left:auto;}
-
-  .label{font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;
-    letter-spacing:.22em;text-transform:uppercase;color:var(--brass-dim);
-    margin-bottom:6px;position:relative;z-index:1;}
-  .front-q{font-family:"Fraunces",serif;font-weight:600;font-size:25px;line-height:1.18;
-    color:var(--ink);position:relative;z-index:1;}
-  .back-a{font-family:"Fraunces",serif;font-weight:600;font-size:21px;line-height:1.25;
-    color:var(--ink);position:relative;z-index:1;margin-bottom:14px;}
-
-  .why,.stat{position:relative;z-index:1;font-size:13px;line-height:1.5;border-radius:8px;
-    padding:10px 12px;margin-top:auto;}
+  .badge.rs{background:transparent;color:var(--brass-dim);border:1px solid var(--brass-dim);margin-left:auto;}
+  .label{font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--brass-dim);margin-bottom:6px;position:relative;z-index:1;}
+  .front-q{font-family:"Fraunces",serif;font-weight:600;font-size:25px;line-height:1.18;color:var(--ink);position:relative;z-index:1;}
+  .back-a{font-family:"Fraunces",serif;font-weight:600;font-size:21px;line-height:1.25;color:var(--ink);position:relative;z-index:1;margin-bottom:14px;}
+  .why,.stat{position:relative;z-index:1;font-size:13px;line-height:1.5;border-radius:8px;padding:10px 12px;margin-top:auto;}
   .why{color:var(--ink-2);background:rgba(196,160,82,.10);border:1px solid rgba(196,160,82,.35);}
   .why + .stat{margin-top:8px;}
-  .why em,.stat em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:9px;
-    font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-dim);
-    display:block;margin-bottom:3px;}
+  .why em,.stat em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--brass-dim);display:block;margin-bottom:3px;}
   .stat{color:#23351f;background:rgba(46,125,91,.12);border:1px solid rgba(46,125,91,.4);}
   .stat em{color:var(--stand);}
-
   .tags{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
-  .tag{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--ink-2);
-    background:rgba(20,17,15,.06);border:1px solid var(--bone-line);
-    padding:2px 7px;border-radius:20px;}
+  .tag{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--ink-2);background:rgba(20,17,15,.06);
+    border:1px solid var(--bone-line);padding:2px 7px;border-radius:20px;}
+  .hint{position:absolute;bottom:14px;right:18px;z-index:1;font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--brass-dim);opacity:.8;}
+  .known-flag{position:absolute;top:14px;right:16px;z-index:2;font-size:18px;color:var(--stand);display:none;}
+  .face.is-known .known-flag{display:block;}
 
-  .hint{position:absolute;bottom:14px;right:18px;z-index:1;
-    font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--brass-dim);opacity:.8;}
-
-  /* nav row */
+  /* nav */
   .nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;}
-  .nav .count{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--bone);
-    letter-spacing:.05em;}
+  .nav .count{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--bone);letter-spacing:.05em;}
   .nav .count b{color:var(--brass);}
-  .navbtn{
-    font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink);font-weight:600;
-    background:var(--brass);border:none;border-radius:8px;padding:9px 16px;cursor:pointer;
-    transition:filter .12s;
-  }
+  .navbtn{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink);font-weight:600;
+    background:var(--brass);border:none;border-radius:8px;padding:9px 16px;cursor:pointer;transition:filter .12s;}
   .navbtn:hover{filter:brightness(1.08);}
   .navbtn.ghost{background:transparent;color:var(--bone);border:1px solid var(--brass-dim);}
   .navbtn:disabled{opacity:.35;cursor:not-allowed;}
-
   .judge{display:flex;gap:10px;justify-content:center;margin-top:12px;}
-  .judge button{
-    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;cursor:pointer;
-    border-radius:8px;padding:8px 18px;border:1px solid transparent;transition:filter .12s;
-  }
+  .judge button{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;cursor:pointer;
+    border-radius:8px;padding:8px 18px;border:1px solid transparent;transition:filter .12s;}
   .judge .again{background:rgba(192,71,59,.15);color:#e0857b;border-color:rgba(192,71,59,.5);}
   .judge .got{background:rgba(46,125,91,.18);color:#7fcaa6;border-color:rgba(46,125,91,.55);}
   .judge button:hover{filter:brightness(1.15);}
@@ -160,13 +149,9 @@
   .empty span,.loading span{color:var(--brass-dim);font-size:11px;}
   .loading code{color:var(--brass);background:#1b1714;padding:2px 6px;border-radius:4px;}
 
-  .known-flag{position:absolute;top:14px;right:16px;z-index:2;font-size:18px;
-    color:var(--stand);display:none;}
-  .face.is-known .known-flag{display:block;}
-
   @media (max-width:480px){
     .front-q{font-size:22px;} .masthead h1{font-size:28px;}
-    .flip{min-height:400px;}
+    .flip,.face{min-height:400px;} .hands{gap:16px;} .action{font-size:30px;}
   }
 </style>
 </head>
@@ -175,112 +160,178 @@
     <div class="masthead">
       <div class="eyebrow">By The Book</div>
       <h1>Deck Viewer</h1>
-      <div class="sub">65 cards · tap to flip · ← → to move</div>
+      <div class="sub" id="sub">your cards vs the dealer — the play and the odds</div>
     </div>
 
-    <div class="toolbar" id="toolbar" hidden>
-      <div class="seg" id="tierSeg">
-        <button data-tier="all" class="on">All</button>
-        <button data-tier="1">Tier 1</button>
-        <button data-tier="2">Tier 2</button>
-        <button data-tier="3">Tier 3</button>
+    <div class="modes">
+      <div class="seg" id="modeSeg">
+        <button data-mode="matchups" class="on">Matchups</button>
+        <button data-mode="lessons">Lessons</button>
       </div>
-      <select class="cat" id="catSel"><option value="all">All categories</option></select>
-      <button class="tool-btn" id="shuffleBtn">⤮ Shuffle</button>
-      <button class="tool-btn" id="resetBtn">Reset progress</button>
     </div>
 
+    <div class="toolbar" id="toolbar"></div>
     <div class="progress" id="progressRow" hidden>
       <span id="progLabel">0 learned</span>
       <div class="bar"><i id="progFill"></i></div>
       <span id="progPct">0%</span>
     </div>
 
-    <div id="stage">
-      <div class="loading">Loading deck…</div>
-    </div>
+    <div id="stage"><div class="loading">Loading…</div></div>
   </div>
 
 <script>
-const PALETTE = {
-  rules:'--c-rules', 'hard-total':'--c-hard-total', 'soft-total':'--c-soft-total',
-  pair:'--c-pair', trap:'--c-trap', counting:'--c-counting',
-  deviation:'--c-deviation', bankroll:'--c-bankroll', etiquette:'--c-etiquette'
-};
-const STORE_KEY = 'btb:known';
-
-let deck = [];
-let view = [];          // filtered + ordered working set
-let idx = 0;
-let flipped = false;
-let order = null;       // shuffle order ids, or null for natural
-let filter = { tier:'all', cat:'all' };
-let known = loadKnown();
-
-function loadKnown(){
-  try { return new Set(JSON.parse(localStorage.getItem(STORE_KEY) || '[]')); }
-  catch { return new Set(); }
+/* ============================ EV engine (infinite deck, S17) ============================ */
+const RANKS=[['A',1/13],[2,1/13],[3,1/13],[4,1/13],[5,1/13],[6,1/13],[7,1/13],[8,1/13],[9,1/13],[10,4/13]];
+function addCard(total,soft,rank){
+  let t=total,s=soft;
+  if(rank==='A'){ if(t+11<=21){t+=11;s=true;} else t+=1; } else t+=rank;
+  if(t>21 && s){ t-=10; s=false; }
+  return [t,s];
 }
+const _dmemo={};
+function dealerDist(total,soft){
+  if(total>21) return {17:0,18:0,19:0,20:0,21:0,bust:1};
+  if(total>=17){ const o={17:0,18:0,19:0,20:0,21:0,bust:0}; o[total]=1; return o; }
+  const key=total+'_'+soft; if(_dmemo[key]) return _dmemo[key];
+  const res={17:0,18:0,19:0,20:0,21:0,bust:0};
+  for(const [rank,p] of RANKS){ const [t,s]=addCard(total,soft,rank); const sub=dealerDist(t,s);
+    for(const k in sub) res[k]+=p*sub[k]; }
+  return _dmemo[key]=res;
+}
+function dealerFromUp(up){ return up==='A'?dealerDist(11,true):dealerDist(up,false); }
+function standEV(T,up){
+  const d=dealerFromUp(up); let win=d.bust,push=0,lose=0;
+  for(const f of [17,18,19,20,21]){ if(f<T) win+=d[f]; else if(f===T) push+=d[f]; else lose+=d[f]; }
+  return {ev:win-lose,win,push,lose};
+}
+function hitBust(T){ let p=0; for(const [rank,pr] of RANKS){ const v=(rank==='A')?1:rank; if(T+v>21) p+=pr; } return p; }
+function doubleEV(total,soft,up){
+  let ev=0; for(const [rank,p] of RANKS){ const [t]=addCard(total,soft,rank); ev+=p*(t>21?-1:standEV(t,up).ev); }
+  return ev*2;
+}
+const pct=x=>Math.round(x*100)+'%';
+const ev2=x=>(x>=0?'+':'')+x.toFixed(2);
+
+/* ============================ strategy data (mirrors the chart) ============================ */
+const UPS=[2,3,4,5,6,7,8,9,10,'A'];
+const HARD=[
+  {k:'h8', label:'Hard 8', cards:['5','3'],  total:8, soft:false, a:'HHHHHHHHHH'},
+  {k:'h9', label:'Hard 9', cards:['6','3'],  total:9, soft:false, a:'HDDDDHHHHH'},
+  {k:'h10',label:'Hard 10',cards:['6','4'],  total:10,soft:false, a:'DDDDDDDDHH'},
+  {k:'h11',label:'Hard 11',cards:['7','4'],  total:11,soft:false, a:'DDDDDDDDDH'},
+  {k:'h12',label:'Hard 12',cards:['10','2'], total:12,soft:false, a:'HHSSSHHHHH'},
+  {k:'h13',label:'Hard 13',cards:['10','3'], total:13,soft:false, a:'SSSSSHHHHH'},
+  {k:'h14',label:'Hard 14',cards:['10','4'], total:14,soft:false, a:'SSSSSHHHHH'},
+  {k:'h15',label:'Hard 15',cards:['10','5'], total:15,soft:false, a:'SSSSSHHHRH'},
+  {k:'h16',label:'Hard 16',cards:['10','6'], total:16,soft:false, a:'SSSSSHHRRR'},
+  {k:'h17',label:'Hard 17',cards:['10','7'], total:17,soft:false, a:'SSSSSSSSSS'},
+];
+const SOFT=[
+  {k:'s13',label:'Soft 13 (A,2)',cards:['A','2'],total:13,soft:true, a:'HHHDDHHHHH'},
+  {k:'s14',label:'Soft 14 (A,3)',cards:['A','3'],total:14,soft:true, a:'HHHDDHHHHH'},
+  {k:'s15',label:'Soft 15 (A,4)',cards:['A','4'],total:15,soft:true, a:'HHDDDHHHHH'},
+  {k:'s16',label:'Soft 16 (A,5)',cards:['A','5'],total:16,soft:true, a:'HHDDDHHHHH'},
+  {k:'s17',label:'Soft 17 (A,6)',cards:['A','6'],total:17,soft:true, a:'HDDDDHHHHH'},
+  {k:'s18',label:'Soft 18 (A,7)',cards:['A','7'],total:18,soft:true, a:'SDDDDSSHHH'},
+  {k:'s19',label:'Soft 19 (A,8)',cards:['A','8'],total:19,soft:true, a:'SSSSSSSSSS'},
+  {k:'s20',label:'Soft 20 (A,9)',cards:['A','9'],total:20,soft:true, a:'SSSSSSSSSS'},
+];
+const PAIRS=[
+  {k:'p2', label:'Pair of 2s', cards:['2','2'],  total:4, soft:false, a:'PPPPPPHHHH'},
+  {k:'p3', label:'Pair of 3s', cards:['3','3'],  total:6, soft:false, a:'PPPPPPHHHH'},
+  {k:'p4', label:'Pair of 4s', cards:['4','4'],  total:8, soft:false, a:'HHHPPHHHHH'},
+  {k:'p5', label:'Pair of 5s', cards:['5','5'],  total:10,soft:false, a:'DDDDDDDDHH'},
+  {k:'p6', label:'Pair of 6s', cards:['6','6'],  total:12,soft:false, a:'PPPPPHHHHH'},
+  {k:'p7', label:'Pair of 7s', cards:['7','7'],  total:14,soft:false, a:'PPPPPPHHHH'},
+  {k:'p8', label:'Pair of 8s', cards:['8','8'],  total:16,soft:false, a:'PPPPPPPPPP'},
+  {k:'p9', label:'Pair of 9s', cards:['9','9'],  total:18,soft:false, a:'PPPPPSPPSS'},
+  {k:'p10',label:'Pair of 10s',cards:['10','10'],total:20,soft:false, a:'SSSSSSSSSS'},
+  {k:'pA', label:'Pair of Aces',cards:['A','A'], total:12,soft:true,  a:'PPPPPPPPPP'},
+];
+const GROUPS={ hard:HARD, soft:SOFT, pairs:PAIRS };
+const ACT={ H:'Hit', S:'Stand', D:'Double', P:'Split', R:'Surrender' };
+
+function upLabel(up){ return up==='A'?'an Ace':('a '+up); }
+function actNote(hand,code){
+  if(code==='D') return hand.soft && hand.total>=18 ? 'double if allowed, else stand' : 'double if allowed, else hit';
+  if(code==='R') return 'surrender if allowed, else hit';
+  if(code==='P') return 'split into two hands';
+  return '';
+}
+function matchupStats(hand,up,code){
+  const lines=[`<b>Dealer</b> busts ${pct(dealerFromUp(up).bust)} showing ${upLabel(up)}.`];
+  if(code==='S'){ const s=standEV(hand.total,up);
+    lines.push(`<b>Stand</b> wins ${pct(s.win)}, loses ${pct(s.lose)}${s.push>0.005?`, pushes ${pct(s.push)}`:''}.`);
+  } else if(code==='H'){
+    if(!hand.soft && hand.total>=12) lines.push(`<b>Hit</b> busts ${pct(hitBust(hand.total))} on the next card.`);
+    else lines.push(`<b>Hit</b> — you can't bust here, so take a card.`);
+  } else if(code==='D'){ lines.push(`<b>Double</b> returns ${ev2(doubleEV(hand.total,hand.soft,up))}/unit.`);
+  } else if(code==='P'){
+    if(hand.k==='p8') lines.push(`Two 8s is a stiff 16 — the worst hand. <b>Split</b> to escape it.`);
+    else if(hand.k==='pA') lines.push(`Two aces = 21 chances. <b>Split</b> — never play them as 2 or 12.`);
+    else lines.push(`<b>Split</b> — play each card as its own fresh hand.`);
+  } else if(code==='R'){ lines.push(`<b>Surrender</b> locks −0.50; standing loses ${pct(standEV(hand.total,up).lose)}.`); }
+  return lines;
+}
+function buildMatchups(group,up){
+  const groups = group==='all' ? ['hard','soft','pairs'] : [group];
+  const ups = up==='all' ? UPS : [up];
+  const out=[];
+  for(const g of groups) for(const hand of GROUPS[g]) for(const u of ups){
+    const code=hand.a[UPS.indexOf(u)];
+    out.push({ id:`${hand.k}-${u}`, group:g, hand, up:u, code });
+  }
+  return out;
+}
+
+/* ============================ shared state ============================ */
+const STORE_KEY='btb:known';
+let mode='matchups';
+let deck=[], view=[], idx=0, flipped=false, order=null;
+let mFilter={ group:'all', up:'all' };
+let lFilter={ tier:'all', cat:'all' };
+let known=loadKnown();
+function loadKnown(){ try{return new Set(JSON.parse(localStorage.getItem(STORE_KEY)||'[]'));}catch{return new Set();} }
 function saveKnown(){ localStorage.setItem(STORE_KEY, JSON.stringify([...known])); }
+function esc(s){ return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 
-function applyFilter(){
-  let list = deck.filter(c =>
-    (filter.tier === 'all' || c.tier === +filter.tier) &&
-    (filter.cat === 'all' || c.category === filter.cat));
-  if (order){
-    const pos = new Map(order.map((id,i)=>[id,i]));
-    list = list.slice().sort((a,b)=>(pos.get(a.id)??0)-(pos.get(b.id)??0));
-  }
-  view = list;
-  if (idx >= view.length) idx = 0;
-  flipped = false;
+const PALETTE={rules:'--c-rules','hard-total':'--c-hard-total','soft-total':'--c-soft-total',
+  pair:'--c-pair',trap:'--c-trap',counting:'--c-counting',deviation:'--c-deviation',
+  bankroll:'--c-bankroll',etiquette:'--c-etiquette'};
+const SUITS=['♠','♥','♣','♦']; // ♠♥♣♦
+function pcardHTML(rank,i){
+  const suit=SUITS[i%4]; const red=(suit==='♥'||suit==='♦');
+  const r=rank==='10'?'10':rank;
+  return `<div class="pcard ${red?'red':''}"><span class="rk">${r}</span><span class="mid">${suit}</span><span class="su">${r}</span></div>`;
 }
 
-function esc(s){ return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-
-function render(){
-  const stage = document.getElementById('stage');
-  if (!view.length){
-    stage.innerHTML = `<div class="empty">No cards match this filter.<br><span>Try a different tier or category.</span></div>`;
-    updateProgress();
-    return;
+/* ============================ filtering / order ============================ */
+function rebuild(){
+  if(mode==='matchups'){
+    view=buildMatchups(mFilter.group, mFilter.up);
+  } else {
+    view=deck.filter(c=>(lFilter.tier==='all'||c.tier===+lFilter.tier)&&(lFilter.cat==='all'||c.category===lFilter.cat));
   }
-  const c = view[idx];
-  const accent = `var(${PALETTE[c.category] || '--brass-dim'})`;
-  const isKnown = known.has(c.id);
-  const rs = c.ruleset_dependent ? `<span class="badge rs">rules-dependent</span>` : '';
-  const tags = (c.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+  if(order){ const pos=new Map(order.map((id,i)=>[id,i])); view=view.slice().sort((a,b)=>(pos.get(a.id)??0)-(pos.get(b.id)??0)); }
+  if(idx>=view.length) idx=0;
+  flipped=false;
+}
 
-  const faceInner = flipped ? `
-            <span class="known-flag">✓</span>
-            <div class="meta">
-              <span class="badge" style="background:${accent}">${esc(c.category)}</span>
-              <span class="badge tier">Tier ${c.tier}</span>
-            </div>
-            <div class="label">Answer</div>
-            <div class="back-a">${esc(c.back)}</div>
-            ${c.why ? `<div class="why"><em>Why</em>${esc(c.why)}</div>` : ''}
-            ${c.stat ? `<div class="stat"><em>By the numbers</em>${esc(c.stat)}</div>` : ''}
-            ${tags ? `<div class="tags">${tags}</div>` : ''}` : `
-            <span class="known-flag">✓</span>
-            <div class="meta">
-              <span class="badge" style="background:${accent}">${esc(c.category)}</span>
-              <span class="badge tier">Tier ${c.tier}</span>
-              ${rs}
-            </div>
-            <div class="label">Question</div>
-            <div class="front-q">${esc(c.front)}</div>
-            <div class="hint">tap to flip</div>`;
-
-  stage.innerHTML = `
-    <div class="scene">
-      <div class="flip" id="flip">
-        <div class="face ${isKnown?'is-known':''}" key="${c.id}-${flipped?'b':'f'}">
-          <div class="plate">${faceInner}</div>
-        </div>
-      </div>
-    </div>
-
+/* ============================ render ============================ */
+function render(){
+  const stage=document.getElementById('stage');
+  if(!view.length){ stage.innerHTML=`<div class="empty">No cards match this filter.<br><span>Try a different selection.</span></div>`; updateProgress(); return; }
+  stage.innerHTML = (mode==='matchups'?matchupFace():lessonFace()) + navHTML();
+  document.getElementById('flip').onclick=doFlip;
+  document.getElementById('prevBtn').onclick=e=>{e.stopPropagation();go(-1);};
+  document.getElementById('nextBtn').onclick=e=>{e.stopPropagation();go(1);};
+  document.getElementById('againBtn').onclick=()=>judge(false);
+  document.getElementById('gotBtn').onclick=()=>judge(true);
+  updateProgress();
+}
+function navHTML(){
+  return `
     <div class="nav">
       <button class="navbtn ghost" id="prevBtn" ${idx===0?'disabled':''}>← Prev</button>
       <div class="count"><b>${idx+1}</b> / ${view.length}</div>
@@ -290,95 +341,119 @@ function render(){
       <button class="again" id="againBtn">Need review</button>
       <button class="got" id="gotBtn">Got it ✓</button>
     </div>`;
-
-  document.getElementById('flip').onclick = doFlip;
-  document.getElementById('prevBtn').onclick = e=>{e.stopPropagation();go(-1);};
-  document.getElementById('nextBtn').onclick = e=>{e.stopPropagation();go(1);};
-  document.getElementById('againBtn').onclick = ()=>judge(false);
-  document.getElementById('gotBtn').onclick = ()=>judge(true);
-  updateProgress();
 }
-
-function doFlip(){ flipped = !flipped; render(); }
-function go(d){
-  const n = idx + d;
-  if (n < 0 || n >= view.length) return;
-  idx = n; flipped = false; render();
+function matchupFace(){
+  const m=view[idx]; const isKnown=known.has(m.id);
+  const playerCards=m.hand.cards.map((r,i)=>pcardHTML(r,i)).join('');
+  const dealerCards=pcardHTML(m.up==='A'?'A':String(m.up),0)+`<div class="pcard back"></div>`;
+  const reveal=flipped;
+  const stats=matchupStats(m.hand,m.up,m.code).map(l=>`<div>${l}</div>`).join('');
+  return `
+    <div class="scene"><div class="flip" id="flip"><div class="face ${isKnown?'is-known':''}"><div class="plate">
+      <span class="known-flag">✓</span>
+      <div class="mu-top"><span class="pill">${esc(m.hand.label)}</span><span class="vs">vs</span><span class="pill">Dealer ${m.up==='A'?'Ace':m.up}</span></div>
+      <div class="hands">
+        <div class="hand"><div class="hand-cap">Your hand</div><div class="cards">${playerCards}</div></div>
+        <div class="hand"><div class="hand-cap">Dealer</div><div class="cards">${dealerCards}</div></div>
+      </div>
+      <div class="answer ${reveal?'show':''}">
+        <div class="action A-${m.code}">${ACT[m.code]}</div>
+        ${actNote(m.hand,m.code)?`<div class="act-note">${actNote(m.hand,m.code)}</div>`:''}
+        <div class="statlines">${stats}</div>
+      </div>
+      ${reveal?'':'<div class="reveal-hint">tap for the play</div>'}
+    </div></div></div></div>`;
 }
-function judge(got){
-  const c = view[idx];
-  if (got) known.add(c.id); else known.delete(c.id);
-  saveKnown();
-  if (idx < view.length - 1) go(1); else render();
+function lessonFace(){
+  const c=view[idx]; const accent=`var(${PALETTE[c.category]||'--brass-dim'})`; const isKnown=known.has(c.id);
+  const rs=c.ruleset_dependent?`<span class="badge rs">rules-dependent</span>`:'';
+  const tags=(c.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+  const inner = flipped ? `
+      <span class="known-flag">✓</span>
+      <div class="meta"><span class="badge" style="background:${accent}">${esc(c.category)}</span><span class="badge tier">Tier ${c.tier}</span></div>
+      <div class="label">Answer</div><div class="back-a">${esc(c.back)}</div>
+      ${c.why?`<div class="why"><em>Why</em>${esc(c.why)}</div>`:''}
+      ${c.stat?`<div class="stat"><em>By the numbers</em>${esc(c.stat)}</div>`:''}
+      ${tags?`<div class="tags">${tags}</div>`:''}` : `
+      <span class="known-flag">✓</span>
+      <div class="meta"><span class="badge" style="background:${accent}">${esc(c.category)}</span><span class="badge tier">Tier ${c.tier}</span>${rs}</div>
+      <div class="label">Question</div><div class="front-q">${esc(c.front)}</div>
+      <div class="hint">tap to flip</div>`;
+  return `<div class="scene"><div class="flip" id="flip"><div class="face ${isKnown?'is-known':''}"><div class="plate">${inner}</div></div></div></div>`;
 }
-
+function doFlip(){ flipped=!flipped; render(); }
+function go(d){ const n=idx+d; if(n<0||n>=view.length) return; idx=n; flipped=false; render(); }
+function judge(got){ const c=view[idx]; if(got) known.add(c.id); else known.delete(c.id); saveKnown(); if(idx<view.length-1) go(1); else render(); }
 function updateProgress(){
-  const total = view.length || deck.length;
-  const learned = view.filter(c=>known.has(c.id)).length;
-  const pct = total ? Math.round(learned/total*100) : 0;
-  document.getElementById('progLabel').textContent = `${learned} / ${total} learned`;
-  document.getElementById('progPct').textContent = `${pct}%`;
-  document.getElementById('progFill').style.width = pct + '%';
+  const total=view.length, learned=view.filter(c=>known.has(c.id)).length, p=total?Math.round(learned/total*100):0;
+  document.getElementById('progLabel').textContent=`${learned} / ${total} learned`;
+  document.getElementById('progPct').textContent=`${p}%`;
+  document.getElementById('progFill').style.width=p+'%';
+}
+function shuffle(){ order=view.map(c=>c.id); for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} idx=0; rebuild(); render(); }
+
+/* ============================ toolbar per mode ============================ */
+function opt(v,label,sel){ return `<option value="${v}" ${v===sel?'selected':''}>${label}</option>`; }
+function renderToolbar(){
+  const tb=document.getElementById('toolbar');
+  if(mode==='matchups'){
+    tb.innerHTML=`
+      <div class="seg" id="grpSeg">
+        ${['all','hard','soft','pairs'].map(g=>`<button data-g="${g}" class="${mFilter.group===g?'on':''}">${g==='all'?'All':g[0].toUpperCase()+g.slice(1)}</button>`).join('')}
+      </div>
+      <select class="sel" id="upSel">${opt('all','Any dealer card',mFilter.up)}${UPS.map(u=>opt(u, 'Dealer '+(u==='A'?'A':u), mFilter.up)).join('')}</select>
+      <button class="tool-btn" id="shuffleBtn">⤮ Shuffle</button>
+      <button class="tool-btn" id="resetBtn">Reset</button>`;
+    tb.querySelector('#grpSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+      mFilter.group=b.dataset.g; order=null; idx=0; renderToolbar(); rebuild(); render();});
+    tb.querySelector('#upSel').addEventListener('change',e=>{mFilter.up=e.target.value==='all'?'all':(e.target.value==='A'?'A':+e.target.value); order=null; idx=0; rebuild(); render();});
+  } else {
+    const cats=[...new Set(deck.map(c=>c.category))];
+    tb.innerHTML=`
+      <div class="seg" id="tierSeg">
+        ${['all','1','2','3'].map(t=>`<button data-t="${t}" class="${lFilter.tier===t?'on':''}">${t==='all'?'All':'Tier '+t}</button>`).join('')}
+      </div>
+      <select class="sel" id="catSel">${opt('all','All categories',lFilter.cat)}${cats.map(c=>opt(c, c+' ('+deck.filter(x=>x.category===c).length+')', lFilter.cat)).join('')}</select>
+      <button class="tool-btn" id="shuffleBtn">⤮ Shuffle</button>
+      <button class="tool-btn" id="resetBtn">Reset</button>`;
+    tb.querySelector('#tierSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+      lFilter.tier=b.dataset.t; order=null; idx=0; renderToolbar(); rebuild(); render();});
+    tb.querySelector('#catSel').addEventListener('change',e=>{lFilter.cat=e.target.value; order=null; idx=0; rebuild(); render();});
+  }
+  tb.querySelector('#shuffleBtn').onclick=shuffle;
+  tb.querySelector('#resetBtn').onclick=()=>{ if(!confirm('Reset learned progress?'))return; known.clear(); saveKnown(); render(); };
+}
+function setMode(m){
+  if(m===mode) return; mode=m; order=null; idx=0; flipped=false;
+  [...document.getElementById('modeSeg').children].forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+  document.getElementById('sub').textContent = m==='matchups'
+    ? 'your cards vs the dealer — the play and the odds'
+    : `${deck.length} cards · tap to flip · ← → to move`;
+  renderToolbar(); rebuild(); render();
 }
 
-function shuffle(){
-  order = view.map(c=>c.id);
-  for (let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
-  idx = 0; applyFilter(); render();
-}
-
-function wireToolbar(){
-  document.getElementById('tierSeg').addEventListener('click', e=>{
-    const b = e.target.closest('button'); if(!b) return;
-    [...e.currentTarget.children].forEach(x=>x.classList.remove('on'));
-    b.classList.add('on'); filter.tier = b.dataset.tier; idx=0; applyFilter(); render();
-  });
-  document.getElementById('catSel').addEventListener('change', e=>{
-    filter.cat = e.target.value; idx=0; applyFilter(); render();
-  });
-  document.getElementById('shuffleBtn').onclick = shuffle;
-  document.getElementById('resetBtn').onclick = ()=>{
-    if (!confirm('Reset learned progress for the whole deck?')) return;
-    known.clear(); saveKnown(); render();
-  };
-  document.addEventListener('keydown', e=>{
-    if (e.target.tagName === 'SELECT') return;
-    if (e.key === 'ArrowLeft') go(-1);
-    else if (e.key === 'ArrowRight') go(1);
-    else if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); doFlip(); }
-    else if (e.key.toLowerCase() === 'g') judge(true);
-    else if (e.key.toLowerCase() === 'a') judge(false);
+/* ============================ boot ============================ */
+function wire(){
+  document.getElementById('modeSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setMode(b.dataset.mode);});
+  document.getElementById('progressRow').hidden=false;
+  document.addEventListener('keydown',e=>{
+    if(e.target.tagName==='SELECT') return;
+    if(e.key==='ArrowLeft')go(-1); else if(e.key==='ArrowRight')go(1);
+    else if(e.key===' '||e.key==='Enter'){e.preventDefault();doFlip();}
+    else if(e.key.toLowerCase()==='g')judge(true); else if(e.key.toLowerCase()==='a')judge(false);
   });
 }
-
 function boot(data){
-  deck = data;
-  // build category dropdown in deck order of first appearance
-  const cats = [...new Set(deck.map(c=>c.category))];
-  const sel = document.getElementById('catSel');
-  cats.forEach(cat=>{
-    const o = document.createElement('option'); o.value = cat;
-    o.textContent = cat + ' (' + deck.filter(c=>c.category===cat).length + ')';
-    sel.appendChild(o);
-  });
-  document.querySelector('.masthead .sub').textContent =
-    `${deck.length} cards · tap to flip · ← → to move`;
-  document.getElementById('toolbar').hidden = false;
-  document.getElementById('progressRow').hidden = false;
-  wireToolbar();
-  applyFilter();
-  render();
+  deck=data; wire(); renderToolbar(); rebuild(); render();
 }
-
+// Matchups mode works without the deck; lessons needs it. Fetch, but don't block matchups.
 fetch('../deck/blackjack-deck.json')
-  .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
   .then(boot)
-  .catch(err => {
-    document.getElementById('stage').innerHTML =
-      `<div class="loading">Couldn't load the deck (${esc(err.message)}).<br><br>
-       <span>Browsers block <code>fetch()</code> over <code>file://</code>. Serve the repo and open via http:</span><br><br>
-       <code>python3 -m http.server</code><br>
-       <span>then visit</span> <code>http://localhost:8000/viewer/</code></div>`;
+  .catch(()=>{ // lessons unavailable (e.g. file://) — matchups still works
+    boot([]);
+    const seg=document.getElementById('modeSeg');
+    seg.querySelector('[data-mode="lessons"]').title='Serve over http to load the lessons deck';
   });
 </script>
 </body>

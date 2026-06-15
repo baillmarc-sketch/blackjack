@@ -123,6 +123,18 @@ plus the *why* when you're not. Wrong moves still play out, so you learn by cons
 You bet **chips** (blackjack pays 3:2, doubles/splits risk more), and the header tracks
 **accuracy %, streak, and hands**. Progress persists in `localStorage`.
 
+Around that core it has the game layer:
+
+- **Juice** — cards deal in and the hole flips on reveal, the bankroll flashes and a
+  win/lose/blackjack banner pops, with optional synthesized sound (muteable).
+- **Drills** — beyond free **Play**, choose **Drill: Hard** (the 44 toughest hands) or
+  **Drill: My misses** (biased toward the spots you've actually misplayed). It records
+  accuracy *per hand type* so it knows your weak spots.
+- **Session summary** — a modal with hands, accuracy, best streak, chips ±, your
+  most-missed hands, and a one-tap "drill my misses."
+- **Challenges & achievements** — a rotating daily challenge with progress, and badges
+  that unlock (and toast) for streaks, bankroll milestones, flawless sessions, etc.
+
 Under the hood it shares the validated EV engine (for the reasoning numbers) and a
 **generalized basic-strategy function** that covers *every* hand, not just the 28 chart
 rows. That function is checked against the reference chart (270/270 cases match), and a

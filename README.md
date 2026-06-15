@@ -86,21 +86,27 @@ look, sealed `BS` (Basic Strategy) and `QS` (Quick Strategy).
 
 ## The deck viewer
 
-`viewer/index.html` is a standalone flashcard app over the deck, in the same brass-on-bone
-plate aesthetic. It's data-driven — point it at a different deck JSON and it re-skins
-itself.
+`viewer/index.html` is a standalone, two-mode practice app in the same brass-on-bone plate
+aesthetic. It needs to be served over http (it reads the deck via `fetch()`):
 
-- **Flip** a card (click, Space, or Enter) to reveal the answer, the *why*, and the
-  computed *stat*.
-- **Filter** by tier (1–3) and by category; the category list and counts are built from the
-  deck at load.
-- **Shuffle** the current selection; **navigate** with the buttons or ← / →.
-- **Track progress**: mark each card *Got it* (`g`) or *Need review* (`a`). Learned cards
-  are remembered in `localStorage` and shown with a ✓ and a progress bar. *Reset progress*
-  clears it.
+**Matchups** (default) — the strategy chart made direct and card-by-card. Each card shows
+**your hand vs the dealer's upcard**, and you tap to reveal **the play** and **the odds
+behind it**:
 
-It degrades gracefully: opened from `file://` (where `fetch()` is blocked) it shows the
-exact command to serve the repo instead of failing silently.
+- All 280 scenarios (hard / soft / pairs × every dealer upcard). Filter by hand group and
+  by dealer card. The recommended action is cross-checked to match the reference chart
+  exactly.
+- The stats are *computed live* by an embedded **infinite-deck S17 EV engine** — dealer
+  bust %, stand win/lose/push, hit-bust %, and double EV/unit — validated against known
+  figures (dealer bust by upcard within ~0.4%, ~28% average). Example: *Hard 16 vs 10 →
+  Surrender; dealer busts 21%, standing loses 79%.*
+
+**Lessons** — the original 65-card flashcard deck. Flip (click / Space / Enter) to reveal
+the answer, the *why*, and the *stat*; filter by tier and category.
+
+Both modes: **shuffle**, keyboard nav (← / →), and **Got it** (`g`) / **Need review** (`a`)
+progress saved in `localStorage` with a ✓ and a progress bar; *Reset* clears it. Matchups
+work even without the deck JSON (e.g. opened from `file://`); the Lessons tab needs it.
 
 ## Provenance & notes
 

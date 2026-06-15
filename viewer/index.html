@@ -31,6 +31,8 @@
   .masthead h1{font-family:"Fraunces",serif;font-weight:900;font-size:34px;line-height:1;
     letter-spacing:-.5px;margin:5px 0 4px;color:var(--bone);}
   .masthead .sub{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--brass-dim);}
+  .masthead a.home{text-decoration:none;display:inline-block;}
+  .masthead a.home:hover .eyebrow{color:var(--brass);}
 
   /* mode + tool controls */
   .modes{display:flex;justify-content:center;margin-bottom:14px;}
@@ -171,8 +173,10 @@
 <body>
   <div class="shell">
     <div class="masthead">
-      <div class="eyebrow">By The Book</div>
-      <h1>Deck Viewer</h1>
+      <a href="../" class="home" title="Back to home">
+        <div class="eyebrow">‹ By The Book</div>
+        <h1>Deck Viewer</h1>
+      </a>
       <div class="sub" id="sub">your cards vs the dealer — the play and the odds</div>
     </div>
 

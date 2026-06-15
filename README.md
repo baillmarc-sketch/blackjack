@@ -9,6 +9,7 @@ deviations. Every number is computed, not remembered.
 ## What's here
 
 ```
+index.html                         landing page — links to the cards and the viewer
 deck/
   blackjack-deck.json              65-card flashcard deck (tiers 1–3)
 cards/
@@ -16,15 +17,27 @@ cards/
   blackjack-cheatsheet-simple.html the 12-rule quick sheet, no percentages
 viewer/
   index.html                       flashcard deck viewer (reads deck/blackjack-deck.json)
+.github/workflows/pages.yml        GitHub Pages deploy on push to main
 ```
 
-Open either reference card directly in a browser. The **viewer** reads the deck over
-`fetch()`, so it needs to be served rather than opened from `file://`:
+It's a static site — no build step, no bundler. Serve the repo root and the whole app
+works:
 
 ```bash
 python3 -m http.server      # from the repo root
-# then open http://localhost:8000/viewer/
+# then open http://localhost:8000/
 ```
+
+(The **viewer** reads the deck over `fetch()`, so it must be served over http, not opened
+from `file://` — every other page works either way. All links are relative, so the site
+also works from a sub-path like `/blackjack/`.)
+
+## Deploy (GitHub Pages)
+
+Pushing to `main` runs `.github/workflows/pages.yml`, which publishes the repo root as a
+static site. **One-time setup:** in the repo, go to **Settings → Pages → Build and
+deployment → Source: GitHub Actions**. After that every push to `main` redeploys; the site
+lives at `https://<owner>.github.io/blackjack/`.
 
 ## The deck
 

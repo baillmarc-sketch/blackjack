@@ -73,20 +73,22 @@
 
   /* card / flip scene */
   .scene{perspective:1600px;width:100%;}
-  .flip{
-    position:relative;width:100%;min-height:360px;
-    transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.0,.2,1);
-    cursor:pointer;
-  }
-  .flip.flipped{transform:rotateY(180deg);}
+  .flip{position:relative;width:100%;min-height:360px;cursor:pointer;}
+  /* Single rendered face — no two-layer backface trick (which fails on iOS Safari
+     and showed both sides at once). Each render animates a short flip-in. */
   .face{
-    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    position:relative;width:100%;min-height:360px;
     display:flex;flex-direction:column;
     background:radial-gradient(120% 80% at 50% -10%, #2a241f 0%, var(--ink) 55%, #100d0b 100%);
     border:1px solid var(--brass-dim);border-radius:18px;padding:10px;
     box-shadow:0 30px 80px rgba(0,0,0,.55), inset 0 0 0 1px rgba(196,160,82,.18);
+    transform-origin:center;animation:flipin .34s cubic-bezier(.4,0,.2,1) both;
   }
-  .face.back{transform:rotateY(180deg);}
+  @keyframes flipin{
+    from{transform:rotateY(-90deg) scale(.96);opacity:0;}
+    60%{opacity:1;}
+    to{transform:rotateY(0) scale(1);opacity:1;}
+  }
   .plate{
     flex:1;background:linear-gradient(180deg,#f6f1e6 0%, var(--bone) 100%);
     border:1px solid var(--brass);border-radius:12px;padding:22px 22px 18px;
@@ -249,24 +251,7 @@ function render(){
   const rs = c.ruleset_dependent ? `<span class="badge rs">rules-dependent</span>` : '';
   const tags = (c.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
 
-  stage.innerHTML = `
-    <div class="scene">
-      <div class="flip ${flipped?'flipped':''}" id="flip">
-        <div class="face front ${isKnown?'is-known':''}">
-          <div class="plate">
-            <span class="known-flag">✓</span>
-            <div class="meta">
-              <span class="badge" style="background:${accent}">${esc(c.category)}</span>
-              <span class="badge tier">Tier ${c.tier}</span>
-              ${rs}
-            </div>
-            <div class="label">Question</div>
-            <div class="front-q">${esc(c.front)}</div>
-            <div class="hint">tap to flip</div>
-          </div>
-        </div>
-        <div class="face back ${isKnown?'is-known':''}">
-          <div class="plate">
+  const faceInner = flipped ? `
             <span class="known-flag">✓</span>
             <div class="meta">
               <span class="badge" style="background:${accent}">${esc(c.category)}</span>
@@ -276,8 +261,22 @@ function render(){
             <div class="back-a">${esc(c.back)}</div>
             ${c.why ? `<div class="why"><em>Why</em>${esc(c.why)}</div>` : ''}
             ${c.stat ? `<div class="stat"><em>By the numbers</em>${esc(c.stat)}</div>` : ''}
-            ${tags ? `<div class="tags">${tags}</div>` : ''}
-          </div>
+            ${tags ? `<div class="tags">${tags}</div>` : ''}` : `
+            <span class="known-flag">✓</span>
+            <div class="meta">
+              <span class="badge" style="background:${accent}">${esc(c.category)}</span>
+              <span class="badge tier">Tier ${c.tier}</span>
+              ${rs}
+            </div>
+            <div class="label">Question</div>
+            <div class="front-q">${esc(c.front)}</div>
+            <div class="hint">tap to flip</div>`;
+
+  stage.innerHTML = `
+    <div class="scene">
+      <div class="flip" id="flip">
+        <div class="face ${isKnown?'is-known':''}" key="${c.id}-${flipped?'b':'f'}">
+          <div class="plate">${faceInner}</div>
         </div>
       </div>
     </div>
@@ -300,7 +299,7 @@ function render(){
   updateProgress();
 }
 
-function doFlip(){ flipped = !flipped; document.getElementById('flip').classList.toggle('flipped', flipped); }
+function doFlip(){ flipped = !flipped; render(); }
 function go(d){
   const n = idx + d;
   if (n < 0 || n >= view.length) return;

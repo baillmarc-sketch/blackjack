@@ -26,6 +26,8 @@
   .masthead h1{font-family:"Fraunces",serif;font-weight:900;font-size:30px;line-height:1;color:var(--bone);margin:5px 0 2px;}
   .masthead a{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--brass-dim);text-decoration:none;}
   .masthead a:hover{color:var(--brass);}
+  .masthead a.home{display:inline-block;}
+  .masthead a.home:hover .eyebrow{color:var(--brass);}
   .topbtns{position:absolute;top:0;right:0;display:flex;gap:6px;}
   .iconbtn{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--bone);background:#17130f;
     border:1px solid var(--brass-dim);border-radius:7px;padding:5px 9px;cursor:pointer;}
@@ -149,9 +151,7 @@
 <body>
   <div class="shell">
     <div class="masthead">
-      <div class="eyebrow">By The Book</div>
-      <h1>Trainer</h1>
-      <a href="../">← back to home</a>
+      <a href="../" class="home" title="Back to home"><div class="eyebrow">‹ By The Book</div><h1>Trainer</h1></a>
       <div class="topbtns">
         <button class="iconbtn" id="soundBtn">♪ on</button>
         <button class="iconbtn" id="sumBtn">Summary</button>

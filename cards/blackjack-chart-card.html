@@ -31,6 +31,10 @@
     padding:32px 16px;
     -webkit-font-smoothing:antialiased;
   }
+  .home-link{position:fixed;top:14px;left:16px;z-index:20;font-family:"IBM Plex Mono",monospace;
+    font-size:11px;letter-spacing:.04em;color:var(--brass);text-decoration:none;
+    background:rgba(12,10,9,.5);padding:5px 9px;border-radius:6px;border:1px solid var(--brass-dim);}
+  .home-link:hover{background:rgba(196,160,82,.16);}
 
   .card{
     width:560px;max-width:100%;
@@ -136,6 +140,7 @@
   @media print{
     body{background:#fff;padding:0;}
     .card{box-shadow:none;border:none;width:100%;}
+    .home-link{display:none;}
     @page{margin:12mm;}
   }
   @media (max-width:480px){
@@ -145,6 +150,7 @@
 </style>
 </head>
 <body>
+  <a class="home-link" href="../">‹ By The Book</a>
   <div class="card">
     <div class="plate">
       <div class="head">

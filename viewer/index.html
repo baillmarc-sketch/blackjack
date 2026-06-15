@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>By The Book — Deck Viewer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14110F; --ink-2:#221d19; --brass:#C4A052; --brass-dim:#8c7437;
+    --bone:#F2ECDE; --bone-line:#d9cfb8;
+    --hit:#C0473B; --stand:#2E7D5B; --double:#C8912E; --split:#3E6E9E; --surr:#897F73;
+    /* category accents */
+    --c-rules:#5b6770; --c-hard-total:#3E6E9E; --c-soft-total:#2E7D5B;
+    --c-pair:#7a5ea0; --c-trap:#C0473B; --c-counting:#C8912E;
+    --c-deviation:#b3702a; --c-bankroll:#4f7a8c; --c-etiquette:#897F73;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#0c0a09;min-height:100%;}
+  body{
+    font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--ink);
+    display:flex;flex-direction:column;align-items:center;
+    padding:28px 16px 40px;-webkit-font-smoothing:antialiased;min-height:100vh;
+  }
+
+  .shell{width:600px;max-width:100%;}
+
+  /* masthead */
+  .masthead{text-align:center;margin-bottom:18px;color:var(--bone);}
+  .masthead .eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-weight:500;letter-spacing:.42em;
+    font-size:10px;color:var(--brass);text-transform:uppercase;padding-left:.42em;
+  }
+  .masthead h1{font-family:"Fraunces",serif;font-weight:900;font-size:34px;
+    line-height:1;letter-spacing:-.5px;margin:5px 0 4px;color:var(--bone);}
+  .masthead .sub{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--brass-dim);}
+
+  /* toolbar */
+  .toolbar{
+    display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;justify-content:center;
+    margin-bottom:14px;
+  }
+  .seg{display:flex;border:1px solid var(--brass-dim);border-radius:7px;overflow:hidden;}
+  .seg button{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;
+    background:transparent;color:var(--bone);border:none;padding:6px 11px;cursor:pointer;
+    border-right:1px solid rgba(196,160,82,.25);transition:background .12s,color .12s;
+  }
+  .seg button:last-child{border-right:none;}
+  .seg button:hover{background:rgba(196,160,82,.12);}
+  .seg button.on{background:var(--brass);color:var(--ink);font-weight:600;}
+
+  select.cat{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--bone);
+    background:#1b1714;border:1px solid var(--brass-dim);border-radius:7px;
+    padding:6px 9px;cursor:pointer;
+  }
+  .tool-btn{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--bone);
+    background:transparent;border:1px solid var(--brass-dim);border-radius:7px;
+    padding:6px 11px;cursor:pointer;transition:background .12s;
+  }
+  .tool-btn:hover{background:rgba(196,160,82,.12);}
+
+  /* progress */
+  .progress{display:flex;align-items:center;gap:10px;margin-bottom:14px;
+    font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--brass-dim);}
+  .bar{flex:1;height:5px;background:#241f1a;border-radius:3px;overflow:hidden;
+    border:1px solid rgba(196,160,82,.2);}
+  .bar > i{display:block;height:100%;width:0;background:var(--stand);transition:width .3s;}
+
+  /* card / flip scene */
+  .scene{perspective:1600px;width:100%;}
+  .flip{
+    position:relative;width:100%;min-height:360px;
+    transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.0,.2,1);
+    cursor:pointer;
+  }
+  .flip.flipped{transform:rotateY(180deg);}
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    display:flex;flex-direction:column;
+    background:radial-gradient(120% 80% at 50% -10%, #2a241f 0%, var(--ink) 55%, #100d0b 100%);
+    border:1px solid var(--brass-dim);border-radius:18px;padding:10px;
+    box-shadow:0 30px 80px rgba(0,0,0,.55), inset 0 0 0 1px rgba(196,160,82,.18);
+  }
+  .face.back{transform:rotateY(180deg);}
+  .plate{
+    flex:1;background:linear-gradient(180deg,#f6f1e6 0%, var(--bone) 100%);
+    border:1px solid var(--brass);border-radius:12px;padding:22px 22px 18px;
+    position:relative;display:flex;flex-direction:column;
+  }
+  .plate::after{content:"";position:absolute;inset:6px;border:1px solid var(--bone-line);
+    border-radius:8px;pointer-events:none;}
+
+  .meta{display:flex;align-items:center;gap:7px;position:relative;z-index:1;margin-bottom:14px;}
+  .badge{
+    font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;color:#fff;padding:3px 7px;border-radius:4px;
+  }
+  .badge.tier{background:var(--ink-2);color:var(--brass);border:1px solid var(--brass-dim);}
+  .badge.rs{background:transparent;color:var(--brass-dim);border:1px solid var(--brass-dim);
+    margin-left:auto;}
+
+  .label{font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--brass-dim);
+    margin-bottom:6px;position:relative;z-index:1;}
+  .front-q{font-family:"Fraunces",serif;font-weight:600;font-size:25px;line-height:1.18;
+    color:var(--ink);position:relative;z-index:1;}
+  .back-a{font-family:"Fraunces",serif;font-weight:600;font-size:21px;line-height:1.25;
+    color:var(--ink);position:relative;z-index:1;margin-bottom:14px;}
+
+  .why,.stat{position:relative;z-index:1;font-size:13px;line-height:1.5;border-radius:8px;
+    padding:10px 12px;margin-top:auto;}
+  .why{color:var(--ink-2);background:rgba(196,160,82,.10);border:1px solid rgba(196,160,82,.35);}
+  .why + .stat{margin-top:8px;}
+  .why em,.stat em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:9px;
+    font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-dim);
+    display:block;margin-bottom:3px;}
+  .stat{color:#23351f;background:rgba(46,125,91,.12);border:1px solid rgba(46,125,91,.4);}
+  .stat em{color:var(--stand);}
+
+  .tags{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
+  .tag{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--ink-2);
+    background:rgba(20,17,15,.06);border:1px solid var(--bone-line);
+    padding:2px 7px;border-radius:20px;}
+
+  .hint{position:absolute;bottom:14px;right:18px;z-index:1;
+    font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--brass-dim);opacity:.8;}
+
+  /* nav row */
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;}
+  .nav .count{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--bone);
+    letter-spacing:.05em;}
+  .nav .count b{color:var(--brass);}
+  .navbtn{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink);font-weight:600;
+    background:var(--brass);border:none;border-radius:8px;padding:9px 16px;cursor:pointer;
+    transition:filter .12s;
+  }
+  .navbtn:hover{filter:brightness(1.08);}
+  .navbtn.ghost{background:transparent;color:var(--bone);border:1px solid var(--brass-dim);}
+  .navbtn:disabled{opacity:.35;cursor:not-allowed;}
+
+  .judge{display:flex;gap:10px;justify-content:center;margin-top:12px;}
+  .judge button{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;cursor:pointer;
+    border-radius:8px;padding:8px 18px;border:1px solid transparent;transition:filter .12s;
+  }
+  .judge .again{background:rgba(192,71,59,.15);color:#e0857b;border-color:rgba(192,71,59,.5);}
+  .judge .got{background:rgba(46,125,91,.18);color:#7fcaa6;border-color:rgba(46,125,91,.55);}
+  .judge button:hover{filter:brightness(1.15);}
+
+  .empty,.loading{color:var(--bone);text-align:center;padding:60px 20px;
+    font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.7;}
+  .empty span,.loading span{color:var(--brass-dim);font-size:11px;}
+  .loading code{color:var(--brass);background:#1b1714;padding:2px 6px;border-radius:4px;}
+
+  .known-flag{position:absolute;top:14px;right:16px;z-index:2;font-size:18px;
+    color:var(--stand);display:none;}
+  .face.is-known .known-flag{display:block;}
+
+  @media (max-width:480px){
+    .front-q{font-size:22px;} .masthead h1{font-size:28px;}
+    .flip{min-height:400px;}
+  }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <div class="masthead">
+      <div class="eyebrow">By The Book</div>
+      <h1>Deck Viewer</h1>
+      <div class="sub">65 cards · tap to flip · ← → to move</div>
+    </div>
+
+    <div class="toolbar" id="toolbar" hidden>
+      <div class="seg" id="tierSeg">
+        <button data-tier="all" class="on">All</button>
+        <button data-tier="1">Tier 1</button>
+        <button data-tier="2">Tier 2</button>
+        <button data-tier="3">Tier 3</button>
+      </div>
+      <select class="cat" id="catSel"><option value="all">All categories</option></select>
+      <button class="tool-btn" id="shuffleBtn">⤮ Shuffle</button>
+      <button class="tool-btn" id="resetBtn">Reset progress</button>
+    </div>
+
+    <div class="progress" id="progressRow" hidden>
+      <span id="progLabel">0 learned</span>
+      <div class="bar"><i id="progFill"></i></div>
+      <span id="progPct">0%</span>
+    </div>
+
+    <div id="stage">
+      <div class="loading">Loading deck…</div>
+    </div>
+  </div>
+
+<script>
+const PALETTE = {
+  rules:'--c-rules', 'hard-total':'--c-hard-total', 'soft-total':'--c-soft-total',
+  pair:'--c-pair', trap:'--c-trap', counting:'--c-counting',
+  deviation:'--c-deviation', bankroll:'--c-bankroll', etiquette:'--c-etiquette'
+};
+const STORE_KEY = 'btb:known';
+
+let deck = [];
+let view = [];          // filtered + ordered working set
+let idx = 0;
+let flipped = false;
+let order = null;       // shuffle order ids, or null for natural
+let filter = { tier:'all', cat:'all' };
+let known = loadKnown();
+
+function loadKnown(){
+  try { return new Set(JSON.parse(localStorage.getItem(STORE_KEY) || '[]')); }
+  catch { return new Set(); }
+}
+function saveKnown(){ localStorage.setItem(STORE_KEY, JSON.stringify([...known])); }
+
+function applyFilter(){
+  let list = deck.filter(c =>
+    (filter.tier === 'all' || c.tier === +filter.tier) &&
+    (filter.cat === 'all' || c.category === filter.cat));
+  if (order){
+    const pos = new Map(order.map((id,i)=>[id,i]));
+    list = list.slice().sort((a,b)=>(pos.get(a.id)??0)-(pos.get(b.id)??0));
+  }
+  view = list;
+  if (idx >= view.length) idx = 0;
+  flipped = false;
+}
+
+function esc(s){ return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+function render(){
+  const stage = document.getElementById('stage');
+  if (!view.length){
+    stage.innerHTML = `<div class="empty">No cards match this filter.<br><span>Try a different tier or category.</span></div>`;
+    updateProgress();
+    return;
+  }
+  const c = view[idx];
+  const accent = `var(${PALETTE[c.category] || '--brass-dim'})`;
+  const isKnown = known.has(c.id);
+  const rs = c.ruleset_dependent ? `<span class="badge rs">rules-dependent</span>` : '';
+  const tags = (c.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+
+  stage.innerHTML = `
+    <div class="scene">
+      <div class="flip ${flipped?'flipped':''}" id="flip">
+        <div class="face front ${isKnown?'is-known':''}">
+          <div class="plate">
+            <span class="known-flag">✓</span>
+            <div class="meta">
+              <span class="badge" style="background:${accent}">${esc(c.category)}</span>
+              <span class="badge tier">Tier ${c.tier}</span>
+              ${rs}
+            </div>
+            <div class="label">Question</div>
+            <div class="front-q">${esc(c.front)}</div>
+            <div class="hint">tap to flip</div>
+          </div>
+        </div>
+        <div class="face back ${isKnown?'is-known':''}">
+          <div class="plate">
+            <span class="known-flag">✓</span>
+            <div class="meta">
+              <span class="badge" style="background:${accent}">${esc(c.category)}</span>
+              <span class="badge tier">Tier ${c.tier}</span>
+            </div>
+            <div class="label">Answer</div>
+            <div class="back-a">${esc(c.back)}</div>
+            ${c.why ? `<div class="why"><em>Why</em>${esc(c.why)}</div>` : ''}
+            ${c.stat ? `<div class="stat"><em>By the numbers</em>${esc(c.stat)}</div>` : ''}
+            ${tags ? `<div class="tags">${tags}</div>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="navbtn ghost" id="prevBtn" ${idx===0?'disabled':''}>← Prev</button>
+      <div class="count"><b>${idx+1}</b> / ${view.length}</div>
+      <button class="navbtn" id="nextBtn" ${idx===view.length-1?'disabled':''}>Next →</button>
+    </div>
+    <div class="judge">
+      <button class="again" id="againBtn">Need review</button>
+      <button class="got" id="gotBtn">Got it ✓</button>
+    </div>`;
+
+  document.getElementById('flip').onclick = doFlip;
+  document.getElementById('prevBtn').onclick = e=>{e.stopPropagation();go(-1);};
+  document.getElementById('nextBtn').onclick = e=>{e.stopPropagation();go(1);};
+  document.getElementById('againBtn').onclick = ()=>judge(false);
+  document.getElementById('gotBtn').onclick = ()=>judge(true);
+  updateProgress();
+}
+
+function doFlip(){ flipped = !flipped; document.getElementById('flip').classList.toggle('flipped', flipped); }
+function go(d){
+  const n = idx + d;
+  if (n < 0 || n >= view.length) return;
+  idx = n; flipped = false; render();
+}
+function judge(got){
+  const c = view[idx];
+  if (got) known.add(c.id); else known.delete(c.id);
+  saveKnown();
+  if (idx < view.length - 1) go(1); else render();
+}
+
+function updateProgress(){
+  const total = view.length || deck.length;
+  const learned = view.filter(c=>known.has(c.id)).length;
+  const pct = total ? Math.round(learned/total*100) : 0;
+  document.getElementById('progLabel').textContent = `${learned} / ${total} learned`;
+  document.getElementById('progPct').textContent = `${pct}%`;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+function shuffle(){
+  order = view.map(c=>c.id);
+  for (let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
+  idx = 0; applyFilter(); render();
+}
+
+function wireToolbar(){
+  document.getElementById('tierSeg').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    [...e.currentTarget.children].forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); filter.tier = b.dataset.tier; idx=0; applyFilter(); render();
+  });
+  document.getElementById('catSel').addEventListener('change', e=>{
+    filter.cat = e.target.value; idx=0; applyFilter(); render();
+  });
+  document.getElementById('shuffleBtn').onclick = shuffle;
+  document.getElementById('resetBtn').onclick = ()=>{
+    if (!confirm('Reset learned progress for the whole deck?')) return;
+    known.clear(); saveKnown(); render();
+  };
+  document.addEventListener('keydown', e=>{
+    if (e.target.tagName === 'SELECT') return;
+    if (e.key === 'ArrowLeft') go(-1);
+    else if (e.key === 'ArrowRight') go(1);
+    else if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); doFlip(); }
+    else if (e.key.toLowerCase() === 'g') judge(true);
+    else if (e.key.toLowerCase() === 'a') judge(false);
+  });
+}
+
+function boot(data){
+  deck = data;
+  // build category dropdown in deck order of first appearance
+  const cats = [...new Set(deck.map(c=>c.category))];
+  const sel = document.getElementById('catSel');
+  cats.forEach(cat=>{
+    const o = document.createElement('option'); o.value = cat;
+    o.textContent = cat + ' (' + deck.filter(c=>c.category===cat).length + ')';
+    sel.appendChild(o);
+  });
+  document.querySelector('.masthead .sub').textContent =
+    `${deck.length} cards · tap to flip · ← → to move`;
+  document.getElementById('toolbar').hidden = false;
+  document.getElementById('progressRow').hidden = false;
+  wireToolbar();
+  applyFilter();
+  render();
+}
+
+fetch('../deck/blackjack-deck.json')
+  .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(boot)
+  .catch(err => {
+    document.getElementById('stage').innerHTML =
+      `<div class="loading">Couldn't load the deck (${esc(err.message)}).<br><br>
+       <span>Browsers block <code>fetch()</code> over <code>file://</code>. Serve the repo and open via http:</span><br><br>
+       <code>python3 -m http.server</code><br>
+       <span>then visit</span> <code>http://localhost:8000/viewer/</code></div>`;
+  });
+</script>
+</body>
+</html>

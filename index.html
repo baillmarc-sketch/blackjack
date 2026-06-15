@@ -71,9 +71,28 @@
   @media (max-width:620px){
     h1{font-size:44px;} .tiles{grid-template-columns:1fr;}
   }
+  /* shared nav */
+  .nav{width:100%;max-width:760px;margin:0 auto 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid rgba(196,160,82,.22);}
+  .nav-brand{font-family:"Fraunces",serif;font-weight:900;font-size:15px;color:var(--bone);text-decoration:none;letter-spacing:-.3px;white-space:nowrap;}
+  .nav-brand:hover{color:var(--brass);}
+  .nav-links{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;}
+  .nav-links a{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--brass-dim);text-decoration:none;padding:5px 9px;border-radius:6px;white-space:nowrap;}
+  .nav-links a:hover{background:rgba(196,160,82,.12);color:var(--bone);}
+  .nav-links a.active{color:var(--ink);background:var(--brass);font-weight:600;}
+  @media print{.nav{display:none;}}
+  @media (max-width:480px){.nav-links a{font-size:10px;padding:4px 6px;} .nav-brand{font-size:14px;}}
 </style>
 </head>
 <body>
+  <nav class="nav">
+    <a class="nav-brand" href="./">By The Book</a>
+    <div class="nav-links">
+      <a href="cards/blackjack-cheatsheet-simple.html">Cheat Sheet</a>
+      <a href="cards/blackjack-chart-card.html">Chart</a>
+      <a href="viewer/">Deck</a>
+      <a href="trainer/">Trainer</a>
+    </div>
+  </nav>
   <div class="wrap">
     <div class="masthead">
       <div class="eyebrow">Blackjack, the right way</div>

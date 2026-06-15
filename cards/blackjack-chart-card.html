@@ -27,14 +27,19 @@
   body{
     font-family:"IBM Plex Sans",system-ui,sans-serif;
     color:var(--ink);
-    display:flex;justify-content:center;
-    padding:32px 16px;
+    display:flex;flex-direction:column;align-items:center;
+    padding:24px 16px 32px;
     -webkit-font-smoothing:antialiased;
   }
-  .home-link{position:fixed;top:14px;left:16px;z-index:20;font-family:"IBM Plex Mono",monospace;
-    font-size:11px;letter-spacing:.04em;color:var(--brass);text-decoration:none;
-    background:rgba(12,10,9,.5);padding:5px 9px;border-radius:6px;border:1px solid var(--brass-dim);}
-  .home-link:hover{background:rgba(196,160,82,.16);}
+  /* shared nav */
+  .nav{width:100%;max-width:560px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid rgba(196,160,82,.22);}
+  .nav-brand{font-family:"Fraunces",serif;font-weight:900;font-size:15px;color:var(--bone);text-decoration:none;letter-spacing:-.3px;white-space:nowrap;}
+  .nav-brand:hover{color:var(--brass);}
+  .nav-links{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;}
+  .nav-links a{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--brass-dim);text-decoration:none;padding:5px 9px;border-radius:6px;white-space:nowrap;}
+  .nav-links a:hover{background:rgba(196,160,82,.12);color:var(--bone);}
+  .nav-links a.active{color:var(--ink);background:var(--brass);font-weight:600;}
+  @media (max-width:480px){.nav-links a{font-size:10px;padding:4px 6px;} .nav-brand{font-size:14px;}}
 
   .card{
     width:560px;max-width:100%;
@@ -140,7 +145,7 @@
   @media print{
     body{background:#fff;padding:0;}
     .card{box-shadow:none;border:none;width:100%;}
-    .home-link{display:none;}
+    .nav{display:none;}
     @page{margin:12mm;}
   }
   @media (max-width:480px){
@@ -150,7 +155,15 @@
 </style>
 </head>
 <body>
-  <a class="home-link" href="../">‹ By The Book</a>
+  <nav class="nav">
+    <a class="nav-brand" href="../">By The Book</a>
+    <div class="nav-links">
+      <a href="../cards/blackjack-cheatsheet-simple.html">Cheat Sheet</a>
+      <a href="../cards/blackjack-chart-card.html" class="active">Chart</a>
+      <a href="../viewer/">Deck</a>
+      <a href="../trainer/">Trainer</a>
+    </div>
+  </nav>
   <div class="card">
     <div class="plate">
       <div class="head">

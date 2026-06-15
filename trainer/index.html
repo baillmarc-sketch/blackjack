@@ -26,8 +26,16 @@
   .masthead h1{font-family:"Fraunces",serif;font-weight:900;font-size:30px;line-height:1;color:var(--bone);margin:5px 0 2px;}
   .masthead a{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--brass-dim);text-decoration:none;}
   .masthead a:hover{color:var(--brass);}
-  .masthead a.home{display:inline-block;}
-  .masthead a.home:hover .eyebrow{color:var(--brass);}
+  /* shared nav */
+  .nav{width:100%;margin:0 0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid rgba(196,160,82,.22);}
+  .nav-brand{font-family:"Fraunces",serif;font-weight:900;font-size:15px;color:var(--bone);text-decoration:none;letter-spacing:-.3px;white-space:nowrap;}
+  .nav-brand:hover{color:var(--brass);}
+  .nav-links{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;}
+  .nav-links a{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--brass-dim);text-decoration:none;padding:5px 9px;border-radius:6px;white-space:nowrap;}
+  .nav-links a:hover{background:rgba(196,160,82,.12);color:var(--bone);}
+  .nav-links a.active{color:var(--ink);background:var(--brass);font-weight:600;}
+  @media print{.nav{display:none;}}
+  @media (max-width:480px){.nav-links a{font-size:10px;padding:4px 6px;} .nav-brand{font-size:14px;}}
   .topbtns{position:absolute;top:0;right:0;display:flex;gap:6px;}
   .iconbtn{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--bone);background:#17130f;
     border:1px solid var(--brass-dim);border-radius:7px;padding:5px 9px;cursor:pointer;}
@@ -150,8 +158,18 @@
 </head>
 <body>
   <div class="shell">
+    <nav class="nav">
+      <a class="nav-brand" href="../">By The Book</a>
+      <div class="nav-links">
+        <a href="../cards/blackjack-cheatsheet-simple.html">Cheat Sheet</a>
+        <a href="../cards/blackjack-chart-card.html">Chart</a>
+        <a href="../viewer/">Deck</a>
+        <a href="../trainer/" class="active">Trainer</a>
+      </div>
+    </nav>
     <div class="masthead">
-      <a href="../" class="home" title="Back to home"><div class="eyebrow">‹ By The Book</div><h1>Trainer</h1></a>
+      <div class="eyebrow">By The Book</div>
+      <h1>Trainer</h1>
       <div class="topbtns">
         <button class="iconbtn" id="soundBtn">♪ on</button>
         <button class="iconbtn" id="sumBtn">Summary</button>

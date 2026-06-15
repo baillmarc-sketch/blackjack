@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>By The Book — Learn Blackjack</title>
+<meta name="description" content="By The Book — a blackjack learning kit: a 65-card flashcard deck, a full basic-strategy chart, and a simplified cheat sheet. Every number computed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14110F; --ink-2:#221d19; --brass:#C4A052; --brass-dim:#8c7437;
+    --bone:#F2ECDE; --bone-line:#d9cfb8;
+    --hit:#C0473B; --stand:#2E7D5B; --double:#C8912E; --split:#3E6E9E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#0c0a09;min-height:100%;}
+  body{
+    font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--bone);
+    display:flex;flex-direction:column;align-items:center;
+    padding:48px 16px 56px;-webkit-font-smoothing:antialiased;min-height:100vh;
+  }
+  .wrap{width:760px;max-width:100%;}
+
+  /* masthead */
+  .masthead{text-align:center;margin-bottom:34px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-weight:500;letter-spacing:.42em;
+    font-size:11px;color:var(--brass);text-transform:uppercase;padding-left:.42em;}
+  h1{font-family:"Fraunces",serif;font-weight:900;font-size:60px;line-height:.95;
+    letter-spacing:-1px;margin:8px 0 12px;color:var(--bone);}
+  .lede{font-size:15px;line-height:1.6;color:#cdbf9f;max-width:520px;margin:0 auto;}
+  .lede b{color:var(--bone);font-weight:600;}
+
+  /* tiles */
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:36px;}
+  a.tile{
+    display:flex;flex-direction:column;text-decoration:none;color:inherit;
+    background:radial-gradient(120% 80% at 50% -10%, #2a241f 0%, var(--ink) 55%, #100d0b 100%);
+    border:1px solid var(--brass-dim);border-radius:16px;padding:8px;
+    box-shadow:0 20px 50px rgba(0,0,0,.5), inset 0 0 0 1px rgba(196,160,82,.16);
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  a.tile:hover{transform:translateY(-4px);border-color:var(--brass);
+    box-shadow:0 28px 64px rgba(0,0,0,.6), inset 0 0 0 1px rgba(196,160,82,.3);}
+  .tile .plate{
+    flex:1;background:linear-gradient(180deg,#f6f1e6 0%, var(--bone) 100%);
+    border:1px solid var(--brass);border-radius:11px;padding:18px 16px 16px;
+    position:relative;color:var(--ink);display:flex;flex-direction:column;
+  }
+  .tile .plate::after{content:"";position:absolute;inset:5px;border:1px solid var(--bone-line);
+    border-radius:7px;pointer-events:none;}
+  .tile .kind{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--brass-dim);position:relative;z-index:1;}
+  .tile h2{font-family:"Fraunces",serif;font-weight:900;font-size:21px;line-height:1.05;
+    margin:7px 0 8px;position:relative;z-index:1;}
+  .tile p{font-size:12px;line-height:1.5;color:var(--ink-2);position:relative;z-index:1;
+    flex:1;}
+  .tile .go{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+    color:var(--brass-dim);margin-top:12px;position:relative;z-index:1;}
+  .tile:hover .go{color:#8a6f2a;}
+  .swatch{display:flex;gap:4px;margin-top:11px;position:relative;z-index:1;}
+  .swatch i{width:14px;height:14px;border-radius:3px;}
+
+  /* footer */
+  .foot{margin-top:40px;text-align:center;font-family:"IBM Plex Mono",monospace;
+    font-size:11px;color:var(--brass-dim);line-height:1.7;}
+  .foot a{color:var(--brass);text-decoration:none;}
+  .foot a:hover{text-decoration:underline;}
+
+  @media (max-width:620px){
+    h1{font-size:44px;} .tiles{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="masthead">
+      <div class="eyebrow">Blackjack, the right way</div>
+      <h1>By The Book</h1>
+      <p class="lede">Learn blackjack from first principles to card counting. A
+        <b>65-card flashcard deck</b>, the full <b>basic-strategy chart</b>, and a
+        <b>simplified cheat sheet</b> — every number computed, not remembered.</p>
+    </div>
+
+    <div class="tiles">
+      <a class="tile" href="cards/blackjack-cheatsheet-simple.html">
+        <div class="plate">
+          <div class="kind">Start Here</div>
+          <h2>Quick Strategy</h2>
+          <p>Twelve plain-language rules that cover most hands. No percentages — just the
+             weak-vs-strong-dealer mental model. The on-ramp.</p>
+          <div class="swatch"><i style="background:var(--stand)"></i><i style="background:var(--hit)"></i></div>
+          <div class="go">Open the cheat sheet →</div>
+        </div>
+      </a>
+
+      <a class="tile" href="cards/blackjack-chart-card.html">
+        <div class="plate">
+          <div class="kind">The Grid</div>
+          <h2>Basic Strategy</h2>
+          <p>The canonical chart — hard totals, soft totals, and pairs — for 4–8 decks,
+             stands soft 17, double after split, late surrender.</p>
+          <div class="swatch"><i style="background:var(--hit)"></i><i style="background:var(--stand)"></i><i style="background:var(--double)"></i><i style="background:var(--split)"></i></div>
+          <div class="go">Open the chart →</div>
+        </div>
+      </a>
+
+      <a class="tile" href="viewer/">
+        <div class="plate">
+          <div class="kind">Practice</div>
+          <h2>Deck Viewer</h2>
+          <p>Flip through all 65 cards. Filter by tier and category, shuffle, and track
+             what you've learned — answer, reasoning, and the computed odds on every card.</p>
+          <div class="swatch"><i style="background:var(--double)"></i><i style="background:var(--split)"></i></div>
+          <div class="go">Open the viewer →</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="foot">
+      Played perfectly, basic strategy holds the house edge near 0.5%.<br>
+      EV figures are an infinite-deck model — approximate, for teaching.
+    </div>
+  </div>
+</body>
+</html>

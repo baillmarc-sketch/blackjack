@@ -128,6 +128,9 @@
   .hint{position:absolute;bottom:14px;right:18px;z-index:1;font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--brass-dim);opacity:.8;}
   .known-flag{position:absolute;top:14px;right:16px;z-index:2;font-size:18px;color:var(--stand);display:none;}
   .face.is-known .known-flag{display:block;}
+  .diff-badge{position:absolute;top:13px;left:15px;z-index:2;font-family:"IBM Plex Mono",monospace;
+    font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px;border-radius:4px;color:#fff;}
+  .diff-badge.easy{background:var(--stand);} .diff-badge.medium{background:var(--double);color:#2a1d05;} .diff-badge.hard{background:var(--hit);}
 
   /* nav */
   .nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;}
@@ -255,6 +258,30 @@ const PAIRS=[
 const GROUPS={ hard:HARD, soft:SOFT, pairs:PAIRS };
 const ACT={ H:'Hit', S:'Stand', D:'Double', P:'Split', R:'Surrender' };
 
+/* Difficulty tiers — how hard the call is / how often it's misplayed.
+   easy  = auto-pilot & the 'always' rules (always split A/8, always stand 17+, low hits)
+   hard  = the real traps an expert drills (surrenders, stiff-vs-strong, soft 18 vs 9-A,
+           12 vs 2/3/4, 11 vs A, the pair edge-splits)
+   medium= everything else: the standard, learnable decisions. */
+const ALWAYS=['h8','h17','s19','s20','p10','pA','p8'];           // uniform rows -> easy
+const PAIR_HARD={p2:[7,8],p3:[7,8],p4:[5,6],p6:[2,7],p7:[8],p9:[7,10,11]};
+function difficulty(hand,up,code){
+  const v=(up==='A')?11:up;
+  if(ALWAYS.includes(hand.k)) return 'easy';
+  if(code==='R') return 'hard';
+  if(hand.k[0]==='p') return (PAIR_HARD[hand.k]||[]).includes(v)?'hard':'medium';
+  if(hand.soft){
+    if(hand.k==='s18' && v>=9) return 'hard';   // soft 18 vs 9/10/A — the famous trap
+    return 'medium';                             // soft doubles & hits are learnable
+  }
+  if(code==='H' && hand.total<=10) return 'easy';          // low totals: just hit
+  if(hand.k==='h11' && up==='A') return 'hard';            // 11 vs A borderline
+  if(hand.total===12 && [2,3,4].includes(v)) return 'hard';// counterintuitive 12s
+  if(hand.total>=12 && hand.total<=16 && code==='H' && v>=7) return 'hard'; // stiff vs strong
+  return 'medium';
+}
+const DIFFS=['easy','medium','hard'];
+
 function upLabel(up){ return up==='A'?'an Ace':('a '+up); }
 function actNote(hand,code){
   if(code==='D') return hand.soft && hand.total>=18 ? 'double if allowed, else stand' : 'double if allowed, else hit';
@@ -277,13 +304,15 @@ function matchupStats(hand,up,code){
   } else if(code==='R'){ lines.push(`<b>Surrender</b> locks −0.50; standing loses ${pct(standEV(hand.total,up).lose)}.`); }
   return lines;
 }
-function buildMatchups(group,up){
+function buildMatchups(group,up,diff){
   const groups = group==='all' ? ['hard','soft','pairs'] : [group];
   const ups = up==='all' ? UPS : [up];
   const out=[];
   for(const g of groups) for(const hand of GROUPS[g]) for(const u of ups){
     const code=hand.a[UPS.indexOf(u)];
-    out.push({ id:`${hand.k}-${u}`, group:g, hand, up:u, code });
+    const d=difficulty(hand,u,code);
+    if(diff && diff!=='all' && d!==diff) continue;
+    out.push({ id:`${hand.k}-${u}`, group:g, hand, up:u, code, diff:d });
   }
   return out;
 }
@@ -292,7 +321,7 @@ function buildMatchups(group,up){
 const STORE_KEY='btb:known';
 let mode='matchups';
 let deck=[], view=[], idx=0, flipped=false, order=null;
-let mFilter={ group:'all', up:'all' };
+let mFilter={ group:'all', up:'all', diff:'all' };
 let lFilter={ tier:'all', cat:'all' };
 let known=loadKnown();
 function loadKnown(){ try{return new Set(JSON.parse(localStorage.getItem(STORE_KEY)||'[]'));}catch{return new Set();} }
@@ -312,7 +341,7 @@ function pcardHTML(rank,i){
 /* ============================ filtering / order ============================ */
 function rebuild(){
   if(mode==='matchups'){
-    view=buildMatchups(mFilter.group, mFilter.up);
+    view=buildMatchups(mFilter.group, mFilter.up, mFilter.diff);
   } else {
     view=deck.filter(c=>(lFilter.tier==='all'||c.tier===+lFilter.tier)&&(lFilter.cat==='all'||c.category===lFilter.cat));
   }
@@ -353,6 +382,7 @@ function matchupFace(){
   const stats=matchupStats(m.hand,m.up,m.code).map(l=>`<div>${l}</div>`).join('');
   return `
     <div class="scene"><div class="flip" id="flip"><div class="face ${isKnown?'is-known':''}"><div class="plate">
+      <span class="diff-badge ${m.diff}">${m.diff}</span>
       <span class="known-flag">✓</span>
       <div class="mu-top"><span class="pill">${esc(m.hand.label)}</span><span class="vs">vs</span><span class="pill">Dealer ${m.up==='A'?'Ace':m.up}</span></div>
       <div class="hands">
@@ -401,12 +431,17 @@ function renderToolbar(){
   const tb=document.getElementById('toolbar');
   if(mode==='matchups'){
     tb.innerHTML=`
+      <div class="seg" id="diffSeg">
+        ${['all',...DIFFS].map(d=>`<button data-d="${d}" class="${mFilter.diff===d?'on':''}">${d==='all'?'All':d[0].toUpperCase()+d.slice(1)}</button>`).join('')}
+      </div>
       <div class="seg" id="grpSeg">
         ${['all','hard','soft','pairs'].map(g=>`<button data-g="${g}" class="${mFilter.group===g?'on':''}">${g==='all'?'All':g[0].toUpperCase()+g.slice(1)}</button>`).join('')}
       </div>
       <select class="sel" id="upSel">${opt('all','Any dealer card',mFilter.up)}${UPS.map(u=>opt(u, 'Dealer '+(u==='A'?'A':u), mFilter.up)).join('')}</select>
       <button class="tool-btn" id="shuffleBtn">⤮ Shuffle</button>
       <button class="tool-btn" id="resetBtn">Reset</button>`;
+    tb.querySelector('#diffSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+      mFilter.diff=b.dataset.d; order=null; idx=0; renderToolbar(); rebuild(); render();});
     tb.querySelector('#grpSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
       mFilter.group=b.dataset.g; order=null; idx=0; renderToolbar(); rebuild(); render();});
     tb.querySelector('#upSel').addEventListener('change',e=>{mFilter.up=e.target.value==='all'?'all':(e.target.value==='A'?'A':+e.target.value); order=null; idx=0; rebuild(); render();});

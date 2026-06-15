@@ -93,9 +93,11 @@ aesthetic. It needs to be served over http (it reads the deck via `fetch()`):
 **your hand vs the dealer's upcard**, and you tap to reveal **the play** and **the odds
 behind it**:
 
-- All 280 scenarios (hard / soft / pairs × every dealer upcard). Filter by hand group and
-  by dealer card. The recommended action is cross-checked to match the reference chart
-  exactly.
+- All 280 scenarios (hard / soft / pairs × every dealer upcard). Filter by **difficulty**
+  (Easy 78 / Medium 158 / Hard 44), by hand group, and by dealer card. *Hard* is the 44
+  real traps an expert drills (16 v 10, 12 v 3, soft 18 v 9, 11 v A, 9,9 v 7, the
+  surrenders); *Easy* holds the auto-pilot "always" rules. The recommended action is
+  cross-checked to match the reference chart exactly.
 - The stats are *computed live* by an embedded **infinite-deck S17 EV engine** — dealer
   bust %, stand win/lose/push, hit-bust %, and double EV/unit — validated against known
   figures (dealer bust by upcard within ~0.4%, ~28% average). Example: *Hard 16 vs 10 →

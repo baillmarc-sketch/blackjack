@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>By The Book — Blackjack Basic Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14110F;
+    --ink-2:#221d19;
+    --brass:#C4A052;
+    --brass-dim:#8c7437;
+    --bone:#F2ECDE;
+    --bone-line:#d9cfb8;
+    /* action colors */
+    --hit:#C0473B;
+    --stand:#2E7D5B;
+    --double:#C8912E;
+    --split:#3E6E9E;
+    --surr:#897F73;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#0c0a09;}
+  body{
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    color:var(--ink);
+    display:flex;justify-content:center;
+    padding:32px 16px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .card{
+    width:560px;max-width:100%;
+    background:
+      radial-gradient(120% 80% at 50% -10%, #2a241f 0%, var(--ink) 55%, #100d0b 100%);
+    border:1px solid var(--brass-dim);
+    border-radius:18px;
+    padding:10px;
+    box-shadow:0 30px 80px rgba(0,0,0,.55), inset 0 0 0 1px rgba(196,160,82,.18);
+  }
+  .plate{
+    background:
+      linear-gradient(180deg,#f6f1e6 0%, var(--bone) 100%);
+    border:1px solid var(--brass);
+    border-radius:12px;
+    padding:26px 24px 20px;
+    position:relative;
+  }
+  .plate::after{
+    content:"";position:absolute;inset:6px;border:1px solid var(--bone-line);
+    border-radius:8px;pointer-events:none;
+  }
+
+  /* masthead */
+  .head{text-align:center;position:relative;z-index:1;padding-bottom:14px;
+    border-bottom:1px solid var(--bone-line);margin-bottom:14px;}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-weight:500;
+    letter-spacing:.42em;font-size:10px;color:var(--brass-dim);
+    text-transform:uppercase;padding-left:.42em;
+  }
+  .title{
+    font-family:"Fraunces",serif;font-weight:900;font-size:42px;
+    line-height:.95;letter-spacing:-.5px;margin:4px 0 6px;color:var(--ink);
+  }
+  .ruleset{
+    font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:400;
+    color:var(--ink-2);letter-spacing:.02em;
+  }
+
+  /* grids */
+  .section{position:relative;z-index:1;margin-top:14px;}
+  .section-label{
+    font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--brass-dim);
+    margin-bottom:5px;display:flex;align-items:center;gap:8px;
+  }
+  .section-label::after{content:"";flex:1;height:1px;background:var(--bone-line);}
+
+  table{border-collapse:separate;border-spacing:2px;width:100%;}
+  th,td{
+    font-family:"IBM Plex Mono",monospace;
+    text-align:center;border-radius:3px;
+  }
+  thead th{
+    font-size:10px;font-weight:600;color:var(--ink-2);
+    padding:2px 0;background:transparent;
+  }
+  thead th.corner{color:var(--brass-dim);text-align:left;padding-left:2px;}
+  tbody th{
+    font-size:10.5px;font-weight:600;color:var(--ink);
+    text-align:left;padding:0 6px 0 2px;white-space:nowrap;width:34px;
+  }
+  td{
+    font-size:11px;font-weight:600;color:#fff;
+    height:19px;line-height:19px;
+  }
+  .H{background:var(--hit);}
+  .S{background:var(--stand);}
+  .D{background:var(--double);color:#2a1d05;}
+  .P{background:var(--split);}
+  .R{background:var(--surr);}
+
+  /* legend */
+  .legend{
+    position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:6px 14px;
+    margin-top:18px;padding-top:13px;border-top:1px solid var(--bone-line);
+    justify-content:center;
+  }
+  .key{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--ink-2);}
+  .chip{width:15px;height:15px;border-radius:3px;display:inline-flex;
+    align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;
+    font-size:9px;font-weight:600;color:#fff;}
+  .chip.D{color:#2a1d05;}
+
+  .foot{
+    position:relative;z-index:1;display:flex;justify-content:space-between;
+    align-items:center;margin-top:14px;gap:12px;
+  }
+  .note{font-family:"IBM Plex Mono",monospace;font-size:8.5px;color:var(--ink-2);
+    line-height:1.45;max-width:340px;}
+  .seal{
+    flex-shrink:0;width:54px;height:54px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #2a241f, var(--ink));
+    border:1.5px solid var(--brass);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:var(--brass);box-shadow:inset 0 0 8px rgba(0,0,0,.6);
+  }
+  .seal b{font-family:"Fraunces",serif;font-weight:900;font-size:13px;line-height:1;}
+  .seal span{font-family:"IBM Plex Mono",monospace;font-size:6px;letter-spacing:.1em;
+    margin-top:2px;max-width:44px;text-align:center;line-height:1.35;}
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .card{box-shadow:none;border:none;width:100%;}
+    @page{margin:12mm;}
+  }
+  @media (max-width:480px){
+    .title{font-size:34px;}
+    td{font-size:10px;}
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="plate">
+      <div class="head">
+        <div class="eyebrow">Blackjack</div>
+        <h1 class="title">Basic Strategy</h1>
+        <div class="ruleset">4&ndash;8 DECKS &middot; STANDS SOFT 17 &middot; DOUBLE AFTER SPLIT &middot; LATE SURRENDER</div>
+      </div>
+
+      <div id="grids"></div>
+
+      <div class="legend" id="legend"></div>
+
+      <div class="foot">
+        <div class="note">
+          D = double, else hit. &nbsp;A,7 vs 3&ndash;6: double, else stand. &nbsp;R = surrender, else hit.<br>
+          Played perfectly, this holds the house edge near 0.5%.
+        </div>
+        <div class="seal"><b>BS</b><span>BY THE BOOK</span></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const cols = ['2','3','4','5','6','7','8','9','10','A'];
+
+  const sections = [
+    { label:'Hard Totals', rows:[
+      ['8 or less','H','H','H','H','H','H','H','H','H','H'],
+      ['9','H','D','D','D','D','H','H','H','H','H'],
+      ['10','D','D','D','D','D','D','D','D','H','H'],
+      ['11','D','D','D','D','D','D','D','D','D','H'],
+      ['12','H','H','S','S','S','H','H','H','H','H'],
+      ['13','S','S','S','S','S','H','H','H','H','H'],
+      ['14','S','S','S','S','S','H','H','H','H','H'],
+      ['15','S','S','S','S','S','H','H','H','R','H'],
+      ['16','S','S','S','S','S','H','H','R','R','R'],
+      ['17+','S','S','S','S','S','S','S','S','S','S'],
+    ]},
+    { label:'Soft Totals', rows:[
+      ['A,2','H','H','H','D','D','H','H','H','H','H'],
+      ['A,3','H','H','H','D','D','H','H','H','H','H'],
+      ['A,4','H','H','D','D','D','H','H','H','H','H'],
+      ['A,5','H','H','D','D','D','H','H','H','H','H'],
+      ['A,6','H','D','D','D','D','H','H','H','H','H'],
+      ['A,7','S','D','D','D','D','S','S','H','H','H'],
+      ['A,8','S','S','S','S','S','S','S','S','S','S'],
+      ['A,9','S','S','S','S','S','S','S','S','S','S'],
+    ]},
+    { label:'Pairs', rows:[
+      ['2,2','P','P','P','P','P','P','H','H','H','H'],
+      ['3,3','P','P','P','P','P','P','H','H','H','H'],
+      ['4,4','H','H','H','P','P','H','H','H','H','H'],
+      ['5,5','D','D','D','D','D','D','D','D','H','H'],
+      ['6,6','P','P','P','P','P','H','H','H','H','H'],
+      ['7,7','P','P','P','P','P','P','H','H','H','H'],
+      ['8,8','P','P','P','P','P','P','P','P','P','P'],
+      ['9,9','P','P','P','P','P','S','P','P','S','S'],
+      ['10,10','S','S','S','S','S','S','S','S','S','S'],
+      ['A,A','P','P','P','P','P','P','P','P','P','P'],
+    ]},
+  ];
+
+  const grids = document.getElementById('grids');
+  sections.forEach(sec=>{
+    const wrap = document.createElement('div');
+    wrap.className='section';
+    let html = `<div class="section-label">${sec.label}</div><table><thead><tr><th class="corner">Hand</th>`;
+    cols.forEach(c=> html += `<th>${c}</th>`);
+    html += `</tr></thead><tbody>`;
+    sec.rows.forEach(r=>{
+      html += `<tr><th>${r[0]}</th>`;
+      for(let i=1;i<r.length;i++){ html += `<td class="${r[i]}">${r[i]}</td>`; }
+      html += `</tr>`;
+    });
+    html += `</tbody></table>`;
+    wrap.innerHTML = html;
+    grids.appendChild(wrap);
+  });
+
+  const keys = [['H','Hit'],['S','Stand'],['D','Double'],['P','Split'],['R','Surrender']];
+  document.getElementById('legend').innerHTML = keys.map(k=>
+    `<span class="key"><span class="chip ${k[0]}">${k[0]}</span>${k[1]}</span>`
+  ).join('');
+</script>
+</body>
+</html>

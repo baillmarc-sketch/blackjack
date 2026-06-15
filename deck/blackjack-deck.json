@@ -1,0 +1,915 @@
+[
+  {
+    "id": "t1-basics-001",
+    "tier": 1,
+    "category": "rules",
+    "front": "What are the card values in blackjack?",
+    "back": "2\u201310 = face value. J/Q/K = 10. Ace = 1 or 11, whichever helps.",
+    "why": "The ace's dual value is what makes 'soft' hands flexible.",
+    "stat": "Ten-value cards are 31% of the deck \u2014 why 10s drive every decision.",
+    "tags": [
+      "rules",
+      "values"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-002",
+    "tier": 1,
+    "category": "rules",
+    "front": "What does a natural (blackjack) pay?",
+    "back": "3:2. A $10 bet pays $15.",
+    "why": "Avoid 6:5 tables \u2014 they quietly raise the house edge.",
+    "stat": "You're dealt a natural about 4.7% of hands \u2014 roughly 1 in 21.",
+    "tags": [
+      "rules",
+      "payout"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-003",
+    "tier": 1,
+    "category": "rules",
+    "front": "What is a push?",
+    "back": "A tie. You and the dealer have the same total. Your bet is returned.",
+    "why": "No win, no loss \u2014 bet comes back.",
+    "stat": "A push returns your bet \u2014 no edge either way.",
+    "tags": [
+      "rules"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-004",
+    "tier": 1,
+    "category": "rules",
+    "front": "What is a bust?",
+    "back": "Going over 21. You lose immediately, even if the dealer busts after.",
+    "why": "Player busts first \u2014 that's the core house edge.",
+    "stat": "The dealer busts about 28% of the time on average \u2014 but you bust first.",
+    "tags": [
+      "rules"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-005",
+    "tier": 1,
+    "category": "rules",
+    "front": "Hit vs Stand \u2014 what's the difference?",
+    "back": "Hit = take another card. Stand = keep your total, end your turn.",
+    "why": "Every decision is built from these two actions.",
+    "stat": "Hit or stand is ~70% of all decisions you'll make.",
+    "tags": [
+      "rules",
+      "actions"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-006",
+    "tier": 1,
+    "category": "rules",
+    "front": "What is doubling down?",
+    "back": "Double your bet, take exactly one more card, then stand.",
+    "why": "Used when one card likely wins \u2014 turns good spots into bigger wins.",
+    "stat": "Doubling 11 vs a 6 returns +0.67/unit \u2014 nearly double the win.",
+    "tags": [
+      "rules",
+      "actions"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-007",
+    "tier": 1,
+    "category": "rules",
+    "front": "What is splitting?",
+    "back": "On a pair, split into two hands with a second equal bet.",
+    "why": "Turns one weak hand into two stronger starts when correct.",
+    "stat": "Splitting correctly adds value on ~6 of the 10 pairs.",
+    "tags": [
+      "rules",
+      "actions"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-008",
+    "tier": 1,
+    "category": "rules",
+    "front": "What is late surrender?",
+    "back": "Give up the hand after the dealer checks for blackjack; lose half your bet.",
+    "why": "Cuts losses on hands too weak to play out (e.g. 16 vs 10).",
+    "stat": "Surrender caps any loss at -0.50/unit \u2014 better than playing out a -0.54 hand.",
+    "tags": [
+      "rules",
+      "actions",
+      "surrender"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t1-basics-009",
+    "tier": 1,
+    "category": "rules",
+    "front": "Should you take insurance?",
+    "back": "No. Decline it every time.",
+    "why": "It's a side bet with a high house edge \u2014 a sucker bet, even with a strong hand.",
+    "stat": "Insurance returns -7.7% per unit \u2014 a flat losing bet.",
+    "tags": [
+      "rules",
+      "insurance"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-010",
+    "tier": 1,
+    "category": "rules",
+    "front": "What does 'dealer stands on soft 17' (S17) mean?",
+    "back": "Dealer must stand on any 17, including A+6. They never hit a 17.",
+    "why": "S17 is better for the player than H17 \u2014 this deck assumes S17.",
+    "stat": "S17 vs H17 is worth about 0.2% to you \u2014 always pick the S17 table.",
+    "tags": [
+      "rules",
+      "dealer"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t1-basics-011",
+    "tier": 1,
+    "category": "etiquette",
+    "front": "How do you signal hit vs stand?",
+    "back": "Hit = tap the table. Stand = wave your hand flat over the cards.",
+    "why": "Hand signals keep it clear for the dealer and the cameras.",
+    "stat": "Hand signals are required at ~100% of US tables \u2014 cameras need them.",
+    "tags": [
+      "etiquette"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-012",
+    "tier": 1,
+    "category": "bankroll",
+    "front": "What is a betting unit?",
+    "back": "Your standard bet size, sized to your session bankroll (often 1\u20132%).",
+    "why": "Betting in units keeps you in the game and controls variance.",
+    "stat": "Bet 1\u20132% of bankroll per hand to survive normal swings.",
+    "tags": [
+      "bankroll"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-013",
+    "tier": 1,
+    "category": "bankroll",
+    "front": "What's the rule on chasing losses?",
+    "back": "Don't. Keep your unit flat. Set a stop-loss and walk when you hit it.",
+    "why": "Chasing blows bankrolls faster than any bad hand.",
+    "stat": "Flat betting cuts your risk of ruin by more than half vs chasing.",
+    "tags": [
+      "bankroll",
+      "discipline"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t1-basics-014",
+    "tier": 1,
+    "category": "rules",
+    "front": "Does perfect basic strategy beat the house?",
+    "back": "No \u2014 it minimizes the house edge to ~0.5%, but doesn't flip it.",
+    "why": "Strategy makes you lose slower; only counting can shift the edge.",
+    "stat": "Perfect basic strategy holds the house edge near 0.5%.",
+    "tags": [
+      "rules",
+      "edge"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-hard-001",
+    "tier": 2,
+    "category": "hard-total",
+    "front": "Hard 5\u20138",
+    "back": "Always Hit.",
+    "why": "Too low to stand, can't bust on the next card.",
+    "stat": "Can't bust on the next card \u2014 hitting is free value.",
+    "tags": [
+      "hard-total"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-hard-002",
+    "tier": 2,
+    "category": "hard-total",
+    "front": "Hard 9",
+    "back": "Double vs 3\u20136. Otherwise Hit (2, 7\u2013A).",
+    "why": "Dealer weak 3\u20136 makes doubling +EV; elsewhere just hit.",
+    "stat": "Doubling 9 vs a 5 returns +0.24/unit.",
+    "tags": [
+      "hard-total",
+      "double"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-hard-003",
+    "tier": 2,
+    "category": "hard-total",
+    "front": "Hard 10",
+    "back": "Double vs 2\u20139. Hit vs 10, A.",
+    "why": "Strong start; double unless dealer shows a 10 or ace.",
+    "stat": "Doubling 10 vs a 6 returns +0.58/unit.",
+    "tags": [
+      "hard-total",
+      "double"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-hard-004",
+    "tier": 2,
+    "category": "hard-total",
+    "front": "Hard 11",
+    "back": "Double vs 2\u201310. Hit vs A.",
+    "why": "Best doubling hand; vs S17 ace you just hit.",
+    "stat": "Doubling 11 vs a 6 returns +0.67/unit \u2014 the best double in the game.",
+    "tags": [
+      "hard-total",
+      "double"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-hard-005",
+    "tier": 2,
+    "category": "hard-total",
+    "front": "Hard 12",
+    "back": "Stand vs 4\u20136. Hit vs 2, 3, 7\u2013A.",
+    "why": "Only stand against the dealer's weakest cards.",
+    "stat": "Hitting 12 busts 31%; only stand when the dealer busts most (4\u20136: ~42%).",
+    "tags": [
+      "hard-total"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-hard-006",
+    "tier": 2,
+    "category": "hard-total",
+    "front": "Hard 13",
+    "back": "Stand vs 2\u20136. Hit vs 7\u2013A.",
+    "why": "Let the dealer bust against low upcards; otherwise improve.",
+    "stat": "Hitting 13 busts 38% \u2014 let the dealer bust instead vs 2\u20136.",
+    "tags": [
+      "hard-total"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-hard-007",
+    "tier": 2,
+    "category": "hard-total",
+    "front": "Hard 14",
+    "back": "Stand vs 2\u20136. Hit vs 7\u2013A.",
+    "why": "Same logic as 13 \u2014 stand on dealer weakness only.",
+    "stat": "Hitting 14 busts 46% \u2014 too risky vs a weak dealer.",
+    "tags": [
+      "hard-total"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-hard-008",
+    "tier": 2,
+    "category": "hard-total",
+    "front": "Hard 15",
+    "back": "Stand vs 2\u20136. Surrender vs 10. Hit vs 7, 8, 9, A.",
+    "why": "15 vs 10 is bad enough to give up half if surrender is allowed.",
+    "stat": "Hitting 15 busts 54%; vs a 10 you only win 23% by standing.",
+    "tags": [
+      "hard-total",
+      "surrender",
+      "high-value"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-hard-009",
+    "tier": 2,
+    "category": "hard-total",
+    "front": "Hard 16",
+    "back": "Stand vs 2\u20136. Surrender vs 9, 10, A. Hit vs 7, 8.",
+    "why": "The worst hand in the game \u2014 surrender the brutal spots.",
+    "stat": "Hitting 16 busts 62%; vs a 10 standing wins just 23%.",
+    "tags": [
+      "hard-total",
+      "surrender",
+      "high-value"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-hard-010",
+    "tier": 2,
+    "category": "hard-total",
+    "front": "Hard 17 or higher",
+    "back": "Always Stand.",
+    "why": "Strong enough; hitting only risks a bust.",
+    "stat": "17+ stands \u2014 hitting busts more often than it helps.",
+    "tags": [
+      "hard-total"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-soft-001",
+    "tier": 2,
+    "category": "soft-total",
+    "front": "Soft 13 (A,2)",
+    "back": "Double vs 5, 6. Otherwise Hit.",
+    "why": "Only double when the dealer is at their weakest.",
+    "stat": "Doubling A,2 vs a 6 returns +0.18/unit.",
+    "tags": [
+      "soft-total",
+      "double"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-soft-002",
+    "tier": 2,
+    "category": "soft-total",
+    "front": "Soft 14 (A,3)",
+    "back": "Double vs 5, 6. Otherwise Hit.",
+    "why": "Same as soft 13 \u2014 narrow doubling window.",
+    "stat": "Doubling A,3 vs a 6 returns +0.18/unit.",
+    "tags": [
+      "soft-total",
+      "double"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-soft-003",
+    "tier": 2,
+    "category": "soft-total",
+    "front": "Soft 15 (A,4)",
+    "back": "Double vs 4\u20136. Otherwise Hit.",
+    "why": "Slightly wider window as the hand improves.",
+    "stat": "Doubling A,4 vs a 5 returns +0.13/unit.",
+    "tags": [
+      "soft-total",
+      "double"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-soft-004",
+    "tier": 2,
+    "category": "soft-total",
+    "front": "Soft 16 (A,5)",
+    "back": "Double vs 4\u20136. Otherwise Hit.",
+    "why": "Double against weak dealer cards; otherwise take a card.",
+    "stat": "Doubling A,5 vs a 6 returns +0.18/unit.",
+    "tags": [
+      "soft-total",
+      "double"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-soft-005",
+    "tier": 2,
+    "category": "soft-total",
+    "front": "Soft 17 (A,6)",
+    "back": "Double vs 3\u20136. Otherwise Hit. Never stand.",
+    "why": "17 isn't strong as a soft hand \u2014 improve or double, don't sit.",
+    "stat": "Doubling A,6 vs a 5 returns +0.18/unit; standing on 17 loses.",
+    "tags": [
+      "soft-total",
+      "double"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-soft-006",
+    "tier": 2,
+    "category": "soft-total",
+    "front": "Soft 18 (A,7)",
+    "back": "Stand vs 2, 7, 8. Double vs 3\u20136 (stand if can't). Hit vs 9, 10, A.",
+    "why": "The most-misplayed hand \u2014 18 loses to high upcards, so hit them.",
+    "stat": "vs a 9, standing on 18 loses (-0.18/unit) \u2014 hitting loses less (-0.10).",
+    "tags": [
+      "soft-total",
+      "double",
+      "high-value"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-soft-007",
+    "tier": 2,
+    "category": "soft-total",
+    "front": "Soft 19 (A,8)",
+    "back": "Always Stand.",
+    "why": "Strong total; under S17 there's no reason to double.",
+    "stat": "Standing on 19 returns +0.39/unit vs a 2 \u2014 a clear winner.",
+    "tags": [
+      "soft-total"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-soft-008",
+    "tier": 2,
+    "category": "soft-total",
+    "front": "Soft 20 (A,9)",
+    "back": "Always Stand.",
+    "why": "Excellent hand \u2014 never break it up.",
+    "stat": "Standing on 20 returns +0.64/unit vs a 2 \u2014 near a lock.",
+    "tags": [
+      "soft-total"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-pair-001",
+    "tier": 2,
+    "category": "pair",
+    "front": "Pair of 2s",
+    "back": "Split vs 2\u20137. Hit vs 8\u2013A.",
+    "why": "With DAS, splitting low pairs against weak dealers pays off.",
+    "stat": "Splitting 2s vs weak dealers (bust ~42%) beats playing a stiff 4.",
+    "tags": [
+      "pair",
+      "split"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-pair-002",
+    "tier": 2,
+    "category": "pair",
+    "front": "Pair of 3s",
+    "back": "Split vs 2\u20137. Hit vs 8\u2013A.",
+    "why": "Same as 2s \u2014 split against dealer weakness with DAS.",
+    "stat": "Same as 2s \u2014 split into two live hands vs dealer 2\u20137.",
+    "tags": [
+      "pair",
+      "split"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-pair-003",
+    "tier": 2,
+    "category": "pair",
+    "front": "Pair of 4s",
+    "back": "Split vs 5, 6. Otherwise Hit.",
+    "why": "Only split the two weakest upcards; 8 is fine to hit.",
+    "stat": "Splitting 4s only gains vs 5/6; otherwise an 8 plays fine.",
+    "tags": [
+      "pair",
+      "split"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-pair-004",
+    "tier": 2,
+    "category": "pair",
+    "front": "Pair of 5s",
+    "back": "Never split. Play as hard 10 \u2014 Double vs 2\u20139, Hit vs 10, A.",
+    "why": "A pair of 5s is a 10 \u2014 splitting throws away a great hand.",
+    "stat": "Doubling the 10 vs a 6 returns +0.58 \u2014 splitting throws that away.",
+    "tags": [
+      "pair",
+      "double"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-pair-005",
+    "tier": 2,
+    "category": "pair",
+    "front": "Pair of 6s",
+    "back": "Split vs 2\u20136. Hit vs 7\u2013A.",
+    "why": "Split against dealer bust cards; otherwise just hit.",
+    "stat": "Split 6s vs a dealer busting ~42% (a 6); a 12 alone is a loser.",
+    "tags": [
+      "pair",
+      "split"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-pair-006",
+    "tier": 2,
+    "category": "pair",
+    "front": "Pair of 7s",
+    "back": "Split vs 2\u20137. Hit vs 8\u2013A.",
+    "why": "Split into two playable hands when the dealer is weak.",
+    "stat": "Split 7s vs 2\u20137 \u2014 two 7s beat one 14 against a weak card.",
+    "tags": [
+      "pair",
+      "split"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-pair-007",
+    "tier": 2,
+    "category": "pair",
+    "front": "Pair of 8s",
+    "back": "Always Split.",
+    "why": "16 is a trash total \u2014 two 8s start two much better hands. Always.",
+    "stat": "A 16 wins only ~23% vs a 10 \u2014 two 8s start far stronger. Always split.",
+    "tags": [
+      "pair",
+      "split",
+      "high-value"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-pair-008",
+    "tier": 2,
+    "category": "pair",
+    "front": "Pair of 9s",
+    "back": "Split vs 2\u20136, 8, 9. Stand vs 7, 10, A.",
+    "why": "Stand on the 18 vs 7 (you beat 17) and vs 10/A; split everything else.",
+    "stat": "vs a 7, your 18 already wins 63% \u2014 stand, don't break it up.",
+    "tags": [
+      "pair",
+      "split",
+      "high-value"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-pair-009",
+    "tier": 2,
+    "category": "pair",
+    "front": "Pair of 10s",
+    "back": "Never split. Stand.",
+    "why": "20 is a near-lock \u2014 don't break a winning hand.",
+    "stat": "Standing on 20 returns +0.70/unit vs a 6 \u2014 never split a winner.",
+    "tags": [
+      "pair"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-pair-010",
+    "tier": 2,
+    "category": "pair",
+    "front": "Pair of Aces",
+    "back": "Always Split.",
+    "why": "Two shots at 21 beats a soft 12. Always split.",
+    "stat": "Split aces: each gets one card at a 31% shot at a ten \u2014 huge upgrade from soft 12.",
+    "tags": [
+      "pair",
+      "split",
+      "high-value"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-trap-001",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: 16 vs dealer 10",
+    "back": "Surrender. If unavailable, Hit. Never stand.",
+    "why": "Feels like you should stand on 16 \u2014 you shouldn't. It's the worst spot in the game.",
+    "stat": "Stand and you win 23% / lose 77%. Hit busts 62%. Surrender caps it at -0.50.",
+    "tags": [
+      "trap",
+      "surrender",
+      "high-value"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-trap-002",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: 16 vs dealer 9",
+    "back": "Surrender. If unavailable, Hit.",
+    "why": "Most players hit or stand here. Against a 9, giving up half is the better play.",
+    "stat": "vs a 9, standing wins only 23%. Surrender (-0.50) beats stand (-0.54) and hit (-0.51).",
+    "tags": [
+      "trap",
+      "surrender",
+      "high-value"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-trap-003",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: 16 vs dealer Ace",
+    "back": "Surrender. If unavailable, Hit.",
+    "why": "An ace upcard is brutal \u2014 cut the loss in half when you can.",
+    "stat": "vs an Ace, standing wins just 17%. Surrender caps the loss at -0.50.",
+    "tags": [
+      "trap",
+      "surrender",
+      "high-value"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-trap-004",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: 15 vs dealer 10",
+    "back": "Surrender. If unavailable, Hit.",
+    "why": "The other key surrender spot people miss \u2014 15 vs 10 is a loser, fold it.",
+    "stat": "vs a 10, 15 wins 23% standing and busts 54% hitting \u2014 surrender (-0.50) wins.",
+    "tags": [
+      "trap",
+      "surrender",
+      "high-value"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-trap-005",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: Soft 18 (A,7) vs dealer 9",
+    "back": "Hit. Do not stand.",
+    "why": "18 feels strong, but it loses to a 9 \u2014 you have to improve it.",
+    "stat": "Standing on 18 vs a 9 loses -0.18; hitting loses less (-0.10).",
+    "tags": [
+      "trap",
+      "soft-total",
+      "high-value"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-trap-006",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: Soft 18 (A,7) vs dealer 10",
+    "back": "Hit. Do not stand.",
+    "why": "Same trap \u2014 standing on 18 vs a 10 is a slow bleed. Take the card.",
+    "stat": "Standing on 18 vs a 10 loses -0.18; hitting is better (-0.14).",
+    "tags": [
+      "trap",
+      "soft-total",
+      "high-value"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-trap-007",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: Soft 18 (A,7) vs dealer Ace",
+    "back": "Hit. Do not stand.",
+    "why": "The ace beats your 18 too often \u2014 improve, don't sit.",
+    "stat": "Standing on 18 vs an Ace loses -0.10; hitting loses less (-0.09).",
+    "tags": [
+      "trap",
+      "soft-total",
+      "high-value"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-trap-008",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: 12 vs dealer 2",
+    "back": "Hit. Do not stand.",
+    "why": "People stand on 12 against low cards \u2014 but 2 isn't weak enough. Hit it.",
+    "stat": "Hitting 12 vs a 2 (-0.25) beats standing (-0.29) \u2014 the 2 isn't weak enough.",
+    "tags": [
+      "trap",
+      "hard-total"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-trap-009",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: 12 vs dealer 3",
+    "back": "Hit. Do not stand.",
+    "why": "Same trap as 12 vs 2 \u2014 only stand on 12 against a 4, 5, or 6.",
+    "stat": "Hitting 12 vs a 3 (-0.23) beats standing (-0.25).",
+    "tags": [
+      "trap",
+      "hard-total"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-trap-010",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: Pair of 9s vs dealer 7",
+    "back": "Stand. Do not split.",
+    "why": "Your 18 beats the dealer's likely 17 \u2014 splitting throws away a winner.",
+    "stat": "Your 18 beats the dealer's 7 ~63% \u2014 standing (+0.40) wins, splitting risks it.",
+    "tags": [
+      "trap",
+      "pair",
+      "high-value"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t2-trap-011",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: Hard 11 vs dealer Ace",
+    "back": "Hit. Do not double.",
+    "why": "You'd double 11 against anything else \u2014 but vs an ace under S17, just hit.",
+    "stat": "vs an Ace under S17, hitting 11 (+0.14) beats doubling (+0.11).",
+    "tags": [
+      "trap",
+      "hard-total"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t2-trap-012",
+    "tier": 2,
+    "category": "trap",
+    "front": "TRAP: Soft 18 (A,7) vs dealer 2",
+    "back": "Stand. Do not double.",
+    "why": "Opposite trap \u2014 vs a 2 you stand on 18, you don't double it.",
+    "stat": "vs a 2, standing on 18 (+0.12) beats doubling (+0.12).",
+    "tags": [
+      "trap",
+      "soft-total"
+    ],
+    "ruleset_dependent": true
+  },
+  {
+    "id": "t3-count-001",
+    "tier": 3,
+    "category": "counting",
+    "front": "Hi-Lo card tags",
+    "back": "2\u20136 = +1. 7\u20139 = 0. 10, J, Q, K, A = \u22121.",
+    "why": "The foundation of counting \u2014 every card shifts the count.",
+    "stat": "Hi-Lo balances to 0 across a full deck \u2014 equal +1 and -1 cards.",
+    "tags": [
+      "counting"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t3-count-002",
+    "tier": 3,
+    "category": "counting",
+    "front": "Why does counting work?",
+    "back": "A deck rich in 10s and aces favors the player (more blackjacks, better doubles).",
+    "why": "You bet big when the remaining deck is in your favor.",
+    "stat": "A deck rich in tens/aces lifts blackjack frequency above the base 4.7%.",
+    "tags": [
+      "counting",
+      "theory"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t3-count-003",
+    "tier": 3,
+    "category": "counting",
+    "front": "What is the running count?",
+    "back": "The running total of all Hi-Lo tags you've seen since the shuffle.",
+    "why": "It's the raw signal before adjusting for cards left.",
+    "stat": "Running count is the raw signal \u2014 accurate only after the true-count step.",
+    "tags": [
+      "counting"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t3-count-004",
+    "tier": 3,
+    "category": "counting",
+    "front": "How do you get the true count?",
+    "back": "True count = running count \u00f7 decks remaining.",
+    "why": "Normalizes the count so a +5 means the same with 1 deck left or 5.",
+    "stat": "Dividing by decks left can swing a +6 running count to a +2 or +6 true.",
+    "tags": [
+      "counting"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t3-count-005",
+    "tier": 3,
+    "category": "counting",
+    "front": "How does the true count guide betting?",
+    "back": "Bet the minimum at 0 or below. Raise your bet as the true count climbs.",
+    "why": "You profit by having more money out when the edge is yours.",
+    "stat": "A solid count + bet spread can flip the ~0.5% house edge to ~+1% player edge.",
+    "tags": [
+      "counting",
+      "betting"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t3-count-006",
+    "tier": 3,
+    "category": "deviation",
+    "front": "Insurance deviation",
+    "back": "Take insurance when the true count is +3 or higher.",
+    "why": "The single most valuable count-based deviation.",
+    "stat": "Base insurance is -7.7%, but at true +3 it turns profitable.",
+    "tags": [
+      "counting",
+      "deviation",
+      "high-value"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t3-count-007",
+    "tier": 3,
+    "category": "deviation",
+    "front": "16 vs 10 deviation",
+    "back": "Stand on 16 vs 10 when the true count is 0 or higher (otherwise hit/surrender).",
+    "why": "A deck-rich count means more cards bust your 16 \u2014 stand.",
+    "stat": "At a high count, more tens left raises your 16-bust risk past 62% \u2014 stand.",
+    "tags": [
+      "counting",
+      "deviation",
+      "high-value"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t3-count-008",
+    "tier": 3,
+    "category": "deviation",
+    "front": "12 vs 3 deviation",
+    "back": "Stand on 12 vs 3 when the true count is +2 or higher.",
+    "why": "High count tips a borderline hit into a stand.",
+    "stat": "12 vs 3 flips from hit to stand around true +2.",
+    "tags": [
+      "counting",
+      "deviation"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t3-count-009",
+    "tier": 3,
+    "category": "deviation",
+    "front": "15 vs 10 deviation",
+    "back": "Stand on 15 vs 10 when the true count is +4 or higher.",
+    "why": "Another bust-risk spot that flips at a high count.",
+    "stat": "15 vs 10 flips from hit/surrender to stand around true +4.",
+    "tags": [
+      "counting",
+      "deviation"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t3-count-010",
+    "tier": 3,
+    "category": "counting",
+    "front": "What is back-counting (Wonging)?",
+    "back": "Watch a table without playing, then jump in only when the count goes positive.",
+    "why": "Lets you skip the negative-count hands entirely.",
+    "stat": "Back-counting lets you skip the ~50% of shoes that run negative.",
+    "tags": [
+      "counting",
+      "technique"
+    ],
+    "ruleset_dependent": false
+  },
+  {
+    "id": "t3-count-011",
+    "tier": 3,
+    "category": "counting",
+    "front": "Is card counting illegal?",
+    "back": "No, but casinos are private businesses and can bar you for it.",
+    "why": "Counting with your head is legal; using a device is not. Expect heat.",
+    "stat": "A counter's edge is ~1% \u2014 small, which is why bankroll and cover matter.",
+    "tags": [
+      "counting",
+      "legal",
+      "disclaimer"
+    ],
+    "ruleset_dependent": false
+  }
+]

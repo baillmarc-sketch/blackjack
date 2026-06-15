@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>By The Book — Blackjack Quick Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14110F; --ink-2:#221d19; --brass:#C4A052; --brass-dim:#8c7437;
+    --bone:#F2ECDE; --bone-line:#d9cfb8;
+    --hit:#C0473B; --stand:#2E7D5B; --double:#C8912E; --split:#3E6E9E; --surr:#897F73;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#0c0a09;}
+  body{font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--ink);
+    display:flex;justify-content:center;padding:32px 16px;-webkit-font-smoothing:antialiased;}
+
+  .card{width:560px;max-width:100%;
+    background:radial-gradient(120% 80% at 50% -10%, #2a241f 0%, var(--ink) 55%, #100d0b 100%);
+    border:1px solid var(--brass-dim);border-radius:18px;padding:10px;
+    box-shadow:0 30px 80px rgba(0,0,0,.55), inset 0 0 0 1px rgba(196,160,82,.18);}
+  .plate{background:linear-gradient(180deg,#f6f1e6 0%, var(--bone) 100%);
+    border:1px solid var(--brass);border-radius:12px;padding:26px 26px 22px;position:relative;}
+  .plate::after{content:"";position:absolute;inset:6px;border:1px solid var(--bone-line);
+    border-radius:8px;pointer-events:none;}
+
+  .head{text-align:center;position:relative;z-index:1;padding-bottom:14px;
+    border-bottom:1px solid var(--bone-line);margin-bottom:16px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-weight:500;letter-spacing:.42em;
+    font-size:10px;color:var(--brass-dim);text-transform:uppercase;padding-left:.42em;}
+  .title{font-family:"Fraunces",serif;font-weight:900;font-size:42px;line-height:.95;
+    letter-spacing:-.5px;margin:4px 0 6px;}
+  .sub{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-2);}
+
+  /* signature: weak vs strong dealer model */
+  .model{position:relative;z-index:1;display:flex;gap:8px;margin-bottom:18px;}
+  .model > div{flex:1;border-radius:8px;padding:11px 13px;color:#fff;}
+  .model .weak{background:var(--stand);}
+  .model .strong{background:var(--hit);}
+  .model h4{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;opacity:.85;margin-bottom:3px;}
+  .model p{font-family:"Fraunces",serif;font-size:15px;font-weight:600;line-height:1.15;}
+  .model span{font-size:11px;font-family:"IBM Plex Sans";font-weight:400;opacity:.9;display:block;margin-top:2px;}
+
+  .block{position:relative;z-index:1;margin-bottom:14px;}
+  .block-label{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--brass-dim);
+    margin-bottom:7px;display:flex;align-items:center;gap:8px;}
+  .block-label::after{content:"";flex:1;height:1px;background:var(--bone-line);}
+  ul{list-style:none;}
+  li{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;line-height:1.5;
+    padding:2px 0;color:var(--ink-2);}
+  li b{color:var(--ink);font-weight:600;}
+  .tag{flex-shrink:0;margin-top:3px;width:auto;min-width:15px;height:15px;padding:0 4px;border-radius:3px;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;color:#fff;}
+  .tag.S{background:var(--stand);} .tag.H{background:var(--hit);}
+  .tag.D{background:var(--double);color:#2a1d05;} .tag.P{background:var(--split);}
+
+  .foot{position:relative;z-index:1;display:flex;justify-content:space-between;
+    align-items:center;margin-top:16px;padding-top:13px;border-top:1px solid var(--bone-line);gap:12px;}
+  .note{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--ink-2);line-height:1.5;}
+  .note b{color:var(--ink);}
+  .seal{flex-shrink:0;width:50px;height:50px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #2a241f, var(--ink));
+    border:1.5px solid var(--brass);display:flex;flex-direction:column;align-items:center;
+    justify-content:center;color:var(--brass);box-shadow:inset 0 0 8px rgba(0,0,0,.6);}
+  .seal b{font-family:"Fraunces",serif;font-weight:900;font-size:12px;line-height:1;}
+  .seal span{font-family:"IBM Plex Mono",monospace;font-size:6px;letter-spacing:.1em;margin-top:2px;max-width:40px;text-align:center;line-height:1.35;}
+
+  @media print{body{background:#fff;padding:0;}.card{box-shadow:none;border:none;width:100%;}@page{margin:12mm;}}
+  @media (max-width:480px){.title{font-size:34px;}.model{flex-direction:column;}}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="plate">
+      <div class="head">
+        <div class="eyebrow">Start Here</div>
+        <h1 class="title">Quick Strategy</h1>
+        <div class="sub">The 12 rules that cover most hands. Learn these first.</div>
+      </div>
+
+      <div class="model">
+        <div class="weak">
+          <h4>Dealer shows 2&ndash;6</h4>
+          <p>They're weak<span>Let them bust. Stand on stiff hands.</span></p>
+        </div>
+        <div class="strong">
+          <h4>Dealer shows 7&ndash;A</h4>
+          <p>They're strong<span>Improve your hand. Take a card.</span></p>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Splits</div>
+        <ul>
+          <li><span class="tag P">P</span><span><b>Always split</b> Aces and 8s — every time.</span></li>
+          <li><span class="tag H">H</span><span><b>Never split</b> 5s or 10s — you're breaking a strong hand.</span></li>
+          <li><span class="tag P">P</span><span>Split the other pairs only when the <b>dealer is weak (2&ndash;6)</b>.</span></li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Hard Hands</div>
+        <ul>
+          <li><span class="tag H">H</span><span><b>8 or less</b> &rarr; always hit.</span></li>
+          <li><span class="tag D">D</span><span><b>10 or 11</b> &rarr; double, unless the dealer shows 10 or Ace.</span></li>
+          <li><span class="tag S">S</span><span><b>12&ndash;16</b> &rarr; stand vs 2&ndash;6, hit vs 7&ndash;A. <i>(But hit 12 vs 2&amp;3.)</i></span></li>
+          <li><span class="tag S">S</span><span><b>17 or more</b> &rarr; always stand.</span></li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Soft Hands &middot; Ace counts as 11</div>
+        <ul>
+          <li><span class="tag H">H</span><span><b>Soft 17 or less</b> &rarr; hit (double vs 5&amp;6).</span></li>
+          <li><span class="tag S">S</span><span><b>Soft 18</b> &rarr; stand vs 2&ndash;8, hit vs 9&ndash;A.</span></li>
+          <li><span class="tag S">S</span><span><b>Soft 19 or more</b> &rarr; always stand.</span></li>
+        </ul>
+      </div>
+
+      <div class="foot">
+        <div class="note">
+          <b>Golden rule:</b> assume the dealer's hidden card is a 10.<br>
+          <b>Never</b> take insurance. Ready for the full grid? Flip to the strategy chart.
+        </div>
+        <div class="seal"><b>QS</b><span>BY THE BOOK</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

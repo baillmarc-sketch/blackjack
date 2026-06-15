@@ -16,7 +16,9 @@ cards/
   blackjack-chart-card.html        full basic-strategy grid (hard / soft / pairs)
   blackjack-cheatsheet-simple.html the 12-rule quick sheet, no percentages
 viewer/
-  index.html                       flashcard deck viewer (reads deck/blackjack-deck.json)
+  index.html                       matchups + flashcard deck viewer
+trainer/
+  index.html                       live hands graded against the book (the game)
 .github/workflows/pages.yml        GitHub Pages deploy on push to main
 ```
 
@@ -109,6 +111,23 @@ the answer, the *why*, and the *stat*; filter by tier and category.
 Both modes: **shuffle**, keyboard nav (← / →), and **Got it** (`g`) / **Need review** (`a`)
 progress saved in `localStorage` with a ✓ and a progress bar; *Reset* clears it. Matchups
 work even without the deck JSON (e.g. opened from `file://`); the Lessons tab needs it.
+
+## The trainer
+
+`trainer/index.html` is the game: real hands dealt from a 6-deck shoe, played against a
+dealer that stands on soft 17. You **Hit / Stand / Double / Split / Surrender** (and field
+**Insurance / even money** when the dealer shows an Ace), and **every decision is graded
+instantly** against basic strategy — a ✓ with the reasoning when you're right, the book play
+plus the *why* when you're not. Wrong moves still play out, so you learn by consequence.
+
+You bet **chips** (blackjack pays 3:2, doubles/splits risk more), and the header tracks
+**accuracy %, streak, and hands**. Progress persists in `localStorage`.
+
+Under the hood it shares the validated EV engine (for the reasoning numbers) and a
+**generalized basic-strategy function** that covers *every* hand, not just the 28 chart
+rows. That function is checked against the reference chart (270/270 cases match), and a
+500k-hand Monte-Carlo of the full ruleset comes out at a ~0.47% house edge — exactly where
+S17 / DAS / late-surrender basic strategy should land.
 
 ## Provenance & notes
 

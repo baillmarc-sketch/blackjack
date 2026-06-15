@@ -223,8 +223,22 @@ function doubleEV(total,soft,up){
   let ev=0; for(const [rank,p] of RANKS){ const [t]=addCard(total,soft,rank); ev+=p*(t>21?-1:standEV(t,up).ev); }
   return ev*2;
 }
+// EV of playing the hand out optimally (hit/stand, no double) — lets us show why hitting beats doubling
+const _peM={};
+function playEV(total,soft,up){
+  if(total>21) return -1;
+  const key=total+'_'+soft+'_'+up; if(key in _peM) return _peM[key];
+  const s=standEV(total,up).ev, h=hitEV(total,soft,up);
+  return _peM[key]=Math.max(s,h);
+}
+function hitEV(total,soft,up){
+  let ev=0; for(const [rank,p] of RANKS){ const [t,s]=addCard(total,soft,rank); ev+=p*(t>21?-1:playEV(t,s,up)); }
+  return ev;
+}
 const pct=x=>Math.round(x*100)+'%';
 const ev2=x=>(x>=0?'+':'')+x.toFixed(2);
+// plain-language money: what an EV-per-unit means on a $10 bet
+const money10=ev=>{ const v=ev*10; return (v>=0?'+$':'−$')+Math.abs(v).toFixed(2); };
 
 /* ============================ strategy data (mirrors the chart) ============================ */
 const UPS=[2,3,4,5,6,7,8,9,10,'A'];
@@ -297,18 +311,31 @@ function actNote(hand,code){
   return '';
 }
 function matchupStats(hand,up,code){
-  const lines=[`<b>Dealer</b> busts ${pct(dealerFromUp(up).bust)} showing ${upLabel(up)}.`];
-  if(code==='S'){ const s=standEV(hand.total,up);
-    lines.push(`<b>Stand</b> wins ${pct(s.win)}, loses ${pct(s.lose)}${s.push>0.005?`, pushes ${pct(s.push)}`:''}.`);
+  const t=hand.total, soft=hand.soft, dealer=upLabel(up), Up=(up==='A'?'an Ace':('a '+up));
+  const lines=[`<b>Dealer:</b> busts ${pct(dealerFromUp(up).bust)} showing ${Up}.`];
+  if(code==='S'){ const s=standEV(t,up);
+    lines.push(`<b>Stand:</b> you win about ${pct(s.win)} and lose ${pct(s.lose)}${s.push>0.005?`, push ${pct(s.push)}`:''}. Taking a card only risks busting your own hand.`);
   } else if(code==='H'){
-    if(!hand.soft && hand.total>=12) lines.push(`<b>Hit</b> busts ${pct(hitBust(hand.total))} on the next card.`);
-    else lines.push(`<b>Hit</b> — you can't bust here, so take a card.`);
-  } else if(code==='D'){ lines.push(`<b>Double</b> returns ${ev2(doubleEV(hand.total,hand.soft,up))}/unit.`);
+    if(!soft && t>=12){
+      lines.push(`<b>Hit:</b> ${Up} is too strong to sit on ${t} — you have to take a card. It busts ${pct(hitBust(t))} of the time, but standing loses even more often.`);
+    } else if(!soft && t>=9){
+      // 9, 10, 11: hittable but doubling is tempting — show why not
+      lines.push(`<b>Hit, don't double:</b> playing it out is worth about ${money10(playEV(t,soft,up))} on a $10 bet; doubling only ${money10(doubleEV(t,soft,up))}, because a double freezes you after one card${(up==='A'||up===10)?` and ${Up} is too strong to risk a second bet`:''}.`);
+      lines.push(`About 1 in 3 cards is a ten, so you'll often want a second card — hitting keeps that option, doubling doesn't.`);
+    } else {
+      lines.push(`<b>Hit:</b> one card can't bust you here, and the hand isn't strong enough to double — just take a card.`);
+    }
+  } else if(code==='D'){
+    lines.push(`<b>Double:</b> the money play — on a $10 bet you'd make about ${money10(doubleEV(t,soft,up))} on average, so you put out a second bet for one card.`);
+    if(t===10||t===11) lines.push(`About 1 in 3 cards is a ten, which gives you ${t+10} — that's why this is the spot to bet more.`);
+    else lines.push(`You're the favorite here, and the dealer is weak (busts ${pct(dealerFromUp(up).bust)}).`);
   } else if(code==='P'){
-    if(hand.k==='p8') lines.push(`Two 8s is a stiff 16 — the worst hand. <b>Split</b> to escape it.`);
-    else if(hand.k==='pA') lines.push(`Two aces = 21 chances. <b>Split</b> — never play them as 2 or 12.`);
-    else lines.push(`<b>Split</b> — play each card as its own fresh hand.`);
-  } else if(code==='R'){ lines.push(`<b>Surrender</b> locks −0.50; standing loses ${pct(standEV(hand.total,up).lose)}.`); }
+    if(hand.k==='p8') lines.push(`<b>Split:</b> two 8s is a stiff 16 — the worst hand in the game. Splitting turns it into two fresh starts.`);
+    else if(hand.k==='pA') lines.push(`<b>Split:</b> two aces is two shots at 21. Never play them as a soft 12.`);
+    else lines.push(`<b>Split:</b> break the pair and play each card as its own fresh hand against ${dealer}.`);
+  } else if(code==='R'){ const s=standEV(t,up);
+    lines.push(`<b>Surrender:</b> ${t} vs ${dealer} loses about ${pct(s.lose)} of the time. Giving up half your bet ($5 of a $10) beats losing the whole $10 that often.`);
+  }
   return lines;
 }
 function buildMatchups(group,up,diff){

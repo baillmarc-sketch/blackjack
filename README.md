@@ -15,11 +15,17 @@ deck/
 cards/
   blackjack-chart-card.html        full basic-strategy grid (hard / soft / pairs)
   blackjack-cheatsheet-simple.html the 12-rule quick sheet, no percentages
+viewer/
+  index.html                       flashcard deck viewer (reads deck/blackjack-deck.json)
 ```
 
-Open either HTML file in a browser to view or print it (they render standalone — fonts
-load from Google Fonts, everything else is inline). Print CSS is included: A-card on
-landscape, UI chrome stripped.
+Open either reference card directly in a browser. The **viewer** reads the deck over
+`fetch()`, so it needs to be served rather than opened from `file://`:
+
+```bash
+python3 -m http.server      # from the repo root
+# then open http://localhost:8000/viewer/
+```
 
 ## The deck
 
@@ -66,6 +72,24 @@ vs strong dealer (7–A)**. Same visual system as the full card, so they read as
 Both cards share a type system (Fraunces / IBM Plex) and a brass-on-bone "maker's plate"
 look, sealed `BS` (Basic Strategy) and `QS` (Quick Strategy).
 
+## The deck viewer
+
+`viewer/index.html` is a standalone flashcard app over the deck, in the same brass-on-bone
+plate aesthetic. It's data-driven — point it at a different deck JSON and it re-skins
+itself.
+
+- **Flip** a card (click, Space, or Enter) to reveal the answer, the *why*, and the
+  computed *stat*.
+- **Filter** by tier (1–3) and by category; the category list and counts are built from the
+  deck at load.
+- **Shuffle** the current selection; **navigate** with the buttons or ← / →.
+- **Track progress**: mark each card *Got it* (`g`) or *Need review* (`a`). Learned cards
+  are remembered in `localStorage` and shown with a ✓ and a progress bar. *Reset progress*
+  clears it.
+
+It degrades gracefully: opened from `file://` (where `fetch()` is blocked) it shows the
+exact command to serve the repo instead of failing silently.
+
 ## Provenance & notes
 
 These assets were authored alongside the Workback project but are unrelated to it; this
@@ -78,5 +102,6 @@ mangled figure, now corrected to the real ~28% average bust rate.
 
 - **Brand**: "By The Book" is a working name; the seals now read `BY THE BOOK`.
 - Label the EV stats *approximate* in any shipped UI (infinite-deck model).
-- No app/runtime yet — these are the data + static cards. A deck viewer/quiz is the
-  natural next step.
+- The viewer is a v1: flip, filter, shuffle, progress. Natural next steps — a spaced-
+  repetition order, a "review only unlearned" mode, and a quiz that hides the answer and
+  scores your call.
